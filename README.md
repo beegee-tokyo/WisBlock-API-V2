@@ -103,7 +103,7 @@ A[Boot] -->|Startup| B(setup)
         R[AT command] --> |Wake up| J   
         T[Timer] --> |Wake up| J   
         I --> J(sleeping)
-        K --> T
+        K -->  | Start timer | T
         J --> L(app_event_handler)
         J --> M(lora_data_handler)
         J --> N(ble_data_handler)
