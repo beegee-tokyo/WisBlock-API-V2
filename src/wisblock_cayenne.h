@@ -27,6 +27,7 @@
 #define SH_PH_H 193		  // 2 bytes pH high precision from SensorHub RK500-02 0.01 pH
 #define SH_PH_L 194		  // 2 bytes pH low precision from SensorHub RK500-02 0.1 pH
 #define SH_PYRANO 195	  // 2 bytes pyrano value from SensorHub RK200-03 1 unsigned MSB (W/m2)
+#define SH_HUMID_PREC 112 // 2 bytes humidity value from SensorHub RK520-02 0.1 %RH
 
 // Only Data Size
 #define LPP_GPS4_SIZE 9
@@ -96,7 +97,7 @@
 #define LPP_SH_PH_H 57				   // SensorHub RK500-02
 #define LPP_SH_PH_L 58				   // SensorHub RK500-02
 #define LPP_SH_PYRANO 59			   // SensorHub RK200-03
-
+#define LPP_SH_HUMID_PREC 60		   // SensorHub RK520-02
 class WisCayenne : public CayenneLPP
 {
 public:
