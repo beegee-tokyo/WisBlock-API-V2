@@ -278,3 +278,51 @@ uint8_t WisCayenne::addVoc_index(uint8_t channel, uint32_t voc_index)
 
 	return _cursor;
 }
+
+/**
+ * @brief Add 2 byte large SensorHub data types
+ *
+ * @param channel Sensor data channel number
+ * @param data_type Sensor data type, e.g. SH_SOIL_MOIST
+ * @param value Sensor value to be added
+ * @return uint8_t bytes added to the data packet
+ */
+uint8_t WisCayenne::addSH_2_value(uint8_t channel, uint8_t data_type, float value)
+{
+	// check buffer overflow
+	if ((_cursor + SH_SIZE_2 + 2) > _maxsize)
+	{
+		_error = LPP_ERROR_OVERFLOW;
+		return 0;
+	}
+	_buffer[_cursor++] = channel;
+	_buffer[_cursor++] = data_type;
+
+	float multiplier = 1;
+	switch (data_type)
+	{
+	case SH_SOIL_MOIST:
+	case SH_SOIL_TEMP:
+	case SH_PH_L:
+		multiplier = 10;
+		break;
+	case SH_EC:
+		multiplier = 1000;
+		break;
+	case SH_PH_H:
+	case SH_WIND_SP:
+		multiplier = 100;
+		break;
+	case SH_PYRANO:
+	case SH_WIND_DIR:
+		multiplier = 1;
+		break;
+	}
+	int_union_s value_union;
+
+	value_union.val16 = value * multiplier; // SensorHub value
+	_buffer[_cursor++] = value_union.val8[1];
+	_buffer[_cursor++] = value_union.val8[0];
+
+	return _cursor;
+}
