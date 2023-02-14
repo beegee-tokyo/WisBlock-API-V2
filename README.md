@@ -103,23 +103,23 @@ A[Boot] -->|Startup| B(setup)
         R[AT command] --> |Wake up| J   
         T[Timer] --> |Wake up| J   
         I --> J(sleeping)
-        K --> T
-        J <--> L(app_event_handler)
-        J <--> M(lora_data_handler)
-        J <--> N(ble_data_handler)
-        J <--> S(AT Command handler)
-        L <--> U(read sensors)
-        M <--> V(join, tx and rx events)
-        N <--> W(handle BLE AT commands)
-        S <--> AA(user AT commands)
-        U <--> L
-        V <--> M
-        W <--> N
-        AA <--> S
-        L <--> J
-        M <--> J
-        N <--> J
-        S <--> J
+        K -->  | Start timer | T
+        J --> L(app_event_handler)
+        J --> M(lora_data_handler)
+        J --> N(ble_data_handler)
+        J --> S(AT Command handler)
+        L --> U(read sensors)
+        M --> V(join, tx and rx events)
+        N --> W(handle BLE AT commands)
+        S --> AA(user AT commands)
+        U --> L
+        V --> M
+        W --> N
+        AA --> S
+        L --> J
+        M --> J
+        N --> J
+        S --> J
 ```
 
 ----
