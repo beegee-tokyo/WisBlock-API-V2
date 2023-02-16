@@ -1,5 +1,5 @@
 /**
- * @file WisBlock-API.h
+ * @file WisBlock-API-V2.h
  * @author Bernd Giesecke (bernd.giesecke@rakwireless.com)
  * @brief Includes and global declarations
  * @version 0.2

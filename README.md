@@ -1,4 +1,4 @@
-# WisBlock-API V2[![Build Status](https://github.com/beegee-tokyo/WisBlock-API/workflows/RAK%20Library%20Build%20CI/badge.svg)](https://github.com/beegee-tokyo/WisBlock-API/actions)
+# WisBlock-API V2[![Build Status](https://github.com/beegee-tokyo/WisBlock-API-V2/workflows/RAK%20Library%20Build%20CI/badge.svg)](https://github.com/beegee-tokyo/WisBlock-API-V2/actions)
 
 | <center><img src="./assets/rakstar.jpg" alt="RAKstar" width=50%></center>  | <center><img src="./assets/RAK-Whirls.png" alt="RAKWireless" width=50%></center> | <center><img src="./assets/WisBlock.png" alt="WisBlock" width=50%></center> | <center><img src="./assets/Yin_yang-48x48.png" alt="BeeGee" width=50%></center>  | <center><img src="./assets/RUI3.png" alt="BeeGee"></center>  |
 | -- | -- | -- | -- | -- |
@@ -46,7 +46,7 @@ _**Support for the RAK11310 and RAK1200 might be added in the future**_
 		* [Example for a custom event using the signal of a PIR sensor to wake up the device](#example-for-a-custom-event-using-the-signal-of-a-pir-sensor-to-wake-up-the-device)
 * [Cayenne LPP packet decoding](#cayenne-lpp-packet-decoding)
 	* [Usage of the WisBlock Extended Cayenne LPP data types](#usage-of-the-wisblock-extended-cayenne-lpp-data-types)
-	* [Data types and channel numbers used with WisBlock API](#data-types-and-channel-numbers-used-with-wisblock-api)
+	* [Data types and channel numbers used with WisBlock API V2](#data-types-and-channel-numbers-used-with-wisblock-api-v2)
 * [Simple code example of the user application](#simple-code-example-of-the-user-application)
 	* [Includes and definitions](#includes-and-definitions)
 	* [setup_app()](#setup-app)
@@ -345,9 +345,6 @@ uint8_t g_user_at_cmd_num = sizeof(g_user_at_cmd_list_example) / sizeof(atcmd_t)
 
 ## Available examples
 
-**REMARK 1** 
-Example code has to be changed to work with WisBlock-API V2 if the example includes custom AT commands!
-
 - [API Test](./examples/api-test) is a very basic example that sends a dummy message over LoRaWAN
 - [Environment Sensor](./examples/environment) shows how to use the frequent wake up call to read sensor data from a RAK1906
 - [Accelerometer Sensor](./examples/accel) shows how to use an external interrupt to create a wake-up event.
@@ -359,7 +356,7 @@ These five examples explain the usage of the API. In all examples the API callba
 - The other examples send their data encoded in the same format as RAKwireless WisNode devices. An explanation of the data format can be found in the RAKwireless [Documentation Center](https://docs.rakwireless.com/Product-Categories/WisTrio/RAK7205-5205/Quickstart/#decoding-sensor-data-on-chirpstack-and-ttn) :arrow_upper_right:. A ready to use packet decoder can be found in the RAKwireless Github repos in [RUI_LoRa_node_payload_decoder](https://github.com/RAKWireless/RUI_LoRa_node_payload_decoder) :arrow_upper_right:
 - The LoRa P2P example (_**LoRa-P2P.ino**_) listens for P2P packets and displays them in the log.    
 
-_**The WisBlock-API has been used as well in the following PlatformIO projects:**_
+_**The WisBlock-API-V2 has been used as well in the following PlatformIO projects:**_
 - _**[RAK4631-Kit-4-RAK1906](https://github.com/beegee-tokyo/RAK4631-Kit-4-RAK1906) :arrow_upper_right: Environment sensor application for the [WisBlock Kit 4](https://store.rakwireless.com/collections/kits-bundles/products/wisblock-kit-4-air-quality-monitor)**_ :arrow_upper_right:
 - _**[RAK4631-Kit-2-RAK1910-RAK1904-RAK1906](https://github.com/beegee-tokyo/RAK4631-Kit-2-RAK1910-RAK1904-RAK1906) :arrow_upper_right: LPWAN GNSS tracker application for the [WisBlock Kit 2](https://store.rakwireless.com/collections/kits-bundles/products/wisblock-kit-2-lora-based-gps-tracker-with-solar-panel)**_ :arrow_upper_right:
 - _**[RAK4631-Kit-2-RAK12500-RAK1906](https://github.com/beegee-tokyo/RAK4631-Kit-2-RAK12500-RAK1906) :arrow_upper_right: LPWAN GNSS tracker application using the [RAK12500](https://store.rakwireless.com/products/wisblock-gnss-location-module-rak12500)**_ :arrow_upper_right:
@@ -773,8 +770,8 @@ Alternative options to setup credentials are
 #endif
 #endif
 
-/** Include the WisBlock-API */
-#include <WisBlock-API.h> // Click to install library: http://librarymanager/All#WisBlock-API
+/** Include the WisBlock-API-V2 */
+#include <WisBlock-API-V2.h> // Click to install library: http://librarymanager/All#WisBlock-API-V2
 
 /** Define the version of your SW */
 #define SW_VERSION_1 1 // major version increase on API change / not backwards compatible
@@ -1102,11 +1099,11 @@ void lora_data_handler(void)
 # Debug and Powersave Settings
 
 ## Arduino    
-In Arduino it is not possible to define settings in the .ino file that can control behaviour of the the included libraries. To change debug log and usage of the blue BLE LED you have to open the file [**`WisBlock-API.h`**](./src/WisBlock.h) in the libraries source folder.
+In Arduino it is not possible to define settings in the .ino file that can control behaviour of the the included libraries. To change debug log and usage of the blue BLE LED you have to open the file [**`WisBlock-API-V2.h`**](./src/WisBlock.h) in the libraries source folder.
 
 ----
 ### Debug Log Output
-To enable/disable the API debug (**`API_LOG()`**) open the file [**`WisBlock-API.h`**](./src/WisBlock.h) in the libraries source folder.    
+To enable/disable the API debug (**`API_LOG()`**) open the file [**`WisBlock-API-V2.h`**](./src/WisBlock.h) in the libraries source folder.    
 Look for 
 ```c++
 #define API_DEBUG 1
@@ -1133,7 +1130,7 @@ Look for
 ```c++
 #define NO_BLE_LED 1
 ```
-in the file **`WisBlock-API`**     
+in the file **`WisBlock-API-V2`**     
 
     0 -> the blue LED will be used to indicate BLE status
     1 -> the blue LED will not used
@@ -1178,6 +1175,8 @@ AT Command functions: Taylor Lee (taylor.lee@rakwireless.com)
 ----
 # Changelog
 [Code releases](CHANGELOG.md)
+- 2023-02-16
+  - Change include file name to avoid conflicts with old WisBlock API
 - 2023-02-05
   - Ready to create RUI3 compatible AT command library as WisBlock-API-V2
 - 2023-01-27

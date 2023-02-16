@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2021
  *
  */
-#include "WisBlock-API.h"
+#include "WisBlock-API-V2.h"
 
 /** LoRaWAN setting from flash */
 s_lorawan_settings g_lorawan_settings;

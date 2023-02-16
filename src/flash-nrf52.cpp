@@ -10,7 +10,7 @@
  */
 #ifdef NRF52_SERIES
 
-#include "WisBlock-API.h"
+#include "WisBlock-API-V2.h"
 
 s_lorawan_settings g_flash_content;
 s_loracompat_settings g_flash_content_compat;

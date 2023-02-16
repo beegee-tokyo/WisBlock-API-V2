@@ -10,7 +10,7 @@
  */
 #ifdef ESP32
 
-#include "WisBlock-API.h"
+#include "WisBlock-API-V2.h"
 
 void start_ble_adv(void);
 uint8_t pack_settings(uint8_t *buffer);

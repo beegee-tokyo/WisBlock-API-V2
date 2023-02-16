@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2021
  *
  */
-#include "WisBlock-API.h"
+#include "WisBlock-API-V2.h"
 
 #if defined NRF52_SERIES || defined ESP32
 /** Millivolts per LSB 3.0V ADC range and 12-bit ADC resolution = 3000mV/4096 */

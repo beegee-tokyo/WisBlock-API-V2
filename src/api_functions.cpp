@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2021
  *
  */
-#include "WisBlock-API.h"
+#include "WisBlock-API-V2.h"
 
 // Define alternate pdMS_TO_TICKS that casts uint64_t for long intervals due to limitation in nrf52840 BSP
 #define mypdMS_TO_TICKS(xTimeInMs) ((TickType_t)(((uint64_t)(xTimeInMs)*configTICK_RATE_HZ) / 1000))

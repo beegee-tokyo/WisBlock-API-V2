@@ -10,7 +10,7 @@
  */
 #ifdef NRF52_SERIES
 
-#include "WisBlock-API.h"
+#include "WisBlock-API-V2.h"
 
 /** OTA DFU service */
 BLEDfu ble_dfu;

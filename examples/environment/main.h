@@ -16,8 +16,8 @@
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BME680.h> // Click to install library: http://librarymanager/All#Adafruit_BME680
 
-/** Include the WisBlock-API */
-#include <WisBlock-API.h> // Click to install library: http://librarymanager/All#WisBlock-API
+/** Include the -V2 */
+#include <WisBlock-API-V2.h> // Click to install library: http://librarymanager/All#WisBlock-API-V2
 
 // Debug output set to 0 to disable app debug output
 #ifndef MY_DEBUG

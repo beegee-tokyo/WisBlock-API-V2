@@ -51,8 +51,8 @@
 #endif
 #endif
 
-/** Include the WisBlock-API */
-#include <WisBlock-API.h> // Click to install library: http://librarymanager/All#WisBlock-API
+/** Include the WisBlock-API-V2 */
+#include <WisBlock-API-V2.h> // Click to install library: http://librarymanager/All#WisBlock-API-V2
 
 /** Define the version of your SW */
 #define SW_VERSION_1 1 // major version increase on API change / not backwards compatible

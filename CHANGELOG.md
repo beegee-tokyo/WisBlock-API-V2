@@ -1,9 +1,12 @@
-# WisBlock-API
+# WisBlock-API-V2
 ----
 Arduino library for RAKWireless WisBlock Core modules that takes all the LoRaWAN, BLE, AT command stuff off your workload. You concentrate on your application and leave the rest to the API. It is made as a companion to the [SX126x-Arduino LoRaWAN library](https://github.com/beegee-tokyo/SX126x-Arduino)    
 
 # Release Notes
 
+## 2.0.1 Rename include file
+  - Rename include file to avoid conflict with old version of WisBlock API
+  
 ## 2.0.0 Make WisBlock API compatible to the RAKwireless RUI3 AT command interface
   - Create as new library WisBlock API V2 as it is not compatible with RAK11200 and RAK11310
   - Rework the AT command to be compatible with [RAKwireless RUI3](https://docs.rakwireless.com/RUI3)

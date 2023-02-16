@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2022
  *
  */
-#include "WisBlock-API.h"
+#include "WisBlock-API-V2.h"
 
 /** Flag if data flash was initialized */
 bool init_flash_done;

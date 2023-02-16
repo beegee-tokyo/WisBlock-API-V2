@@ -16,8 +16,8 @@
 /** Add you required includes after Arduino.h */
 
 #include <Wire.h>
-/** Include the WisBlock-API */
-#include <WisBlock-API.h>
+/** Include the WisBlock-API-V2 */
+#include <WisBlock-API-V2.h>
 
 // Debug output set to 0 to disable app debug output
 #ifndef MY_DEBUG

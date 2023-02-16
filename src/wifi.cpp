@@ -9,7 +9,7 @@
  *
  */
 #ifdef ESP32
-#include "WisBlock-API.h"
+#include "WisBlock-API-V2.h"
 #include <WiFi.h>
 #include <WiFiMulti.h>
 #include <esp_wifi.h>

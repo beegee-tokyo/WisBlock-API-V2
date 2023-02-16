@@ -104,8 +104,8 @@ bool init_gnss(void);
 bool poll_gnss(void);
 
 // LoRaWan functions
-/** Include the WisBlock-API */
-#include <WisBlock-API.h> // Click to install library: http://librarymanager/All#WisBlock-API
+/** Include the WisBlock-API-V2 */
+#include <WisBlock-API-V2.h> // Click to install library: http://librarymanager/All#WisBlock-API-V2
 
 struct tracker_data_s
 {

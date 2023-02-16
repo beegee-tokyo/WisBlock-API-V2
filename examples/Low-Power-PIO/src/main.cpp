@@ -10,7 +10,7 @@
  */
 
 #include <Arduino.h>
-#include <WisBlock-API.h>
+#include <WisBlock-API-V2.h>
 
 // Debug output set to 0 to disable app debug output
 #ifndef MY_DEBUG
