@@ -4,6 +4,10 @@ Arduino library for RAKWireless WisBlock Core modules that takes all the LoRaWAN
 
 # Release Notes
 
+## 2.0.2 Fix P2P bandwidths
+  - Fix wrong mapping for RUI3 bandwidths to WisBlock API bandwidths
+  - Change status output (separate LoRaWAN and P2P)
+  
 ## 2.0.1 Rename include file
   - Rename include file to avoid conflict with old version of WisBlock API
   

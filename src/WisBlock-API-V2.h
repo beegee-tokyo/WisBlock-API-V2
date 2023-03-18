@@ -14,8 +14,6 @@
 #define WISBLOCK_API_VER 2
 #define WISBLOCK_API_VER2 0
 #define WISBLOCK_API_VER3 0
-#define WISBLOCK_API_BUILD_TIME "04.02.2023"
-
 #ifndef NO_BLE_LED
 // Set usage of BLE connection LED (blue). Comment the line to enable LED
 #define NO_BLE_LED 1
@@ -224,7 +222,7 @@ struct s_lorawan_settings
 	uint32_t p2p_frequency = 916000000;
 	// Tx power 0 .. 22
 	uint8_t p2p_tx_power = 22;
-	// Bandwidth 0: 125 kHz, 1: 250 kHz, 2: 500 kHz, 3: Reserved
+	// Bandwidth 0: 125, 1: 250, 2: 500, 3: 62.5, 4: 41.67, 5: 31.25, 6: 20.83, 7: 15.63, 8: 10.4, 9: 7.8
 	uint8_t p2p_bandwidth = 0;
 	// Spreading Factor SF7..SF12
 	uint8_t p2p_sf = 7;
@@ -349,6 +347,22 @@ bool init_serial_task(void);
 void usb_rx_cb(void);
 void stop_ble_adv(void);
 #endif
+
+/** Application build time */
+const unsigned char app_build_time[] =
+	{
+		BUILD_DAY_CH0,
+		BUILD_DAY_CH1,
+		'.',
+		BUILD_MONTH_CH0,
+		BUILD_MONTH_CH1,
+		'.',
+		BUILD_YEAR_CH0,
+		BUILD_YEAR_CH1,
+		BUILD_YEAR_CH2,
+		BUILD_YEAR_CH3};
+
+#define WISBLOCK_API_BUILD_TIME app_build_time
 
 // API stuff
 void setup_app(void);

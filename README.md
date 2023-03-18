@@ -1175,6 +1175,10 @@ AT Command functions: Taylor Lee (taylor.lee@rakwireless.com)
 ----
 # Changelog
 [Code releases](CHANGELOG.md)
+- 2023-03-18
+  - Change status output (separate LoRaWAN and P2P)
+- 2023-02-16
+  - Fix wrong mapping for RUI3 bandwidths to WisBlock API bandwidths
 - 2023-02-16
   - Change include file name to avoid conflicts with old WisBlock API
 - 2023-02-05

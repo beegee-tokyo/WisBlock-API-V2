@@ -36,7 +36,7 @@ uint8_t api_regions[] = {4, 2, 12, 7, 5, 8, 1, 6, 0, 9, 10, 11, 3};
 
 /**
  * @brief Set the device to new settings
- * 
+ *
  */
 void set_new_config(void)
 {
@@ -130,72 +130,77 @@ void at_settings(void)
 #ifdef ESP32
 	AT_PRINTF("   RAK11200");
 #endif
-	AT_PRINTF("   Auto join %s", g_lorawan_settings.auto_join ? "enabled" : "disabled");
 	AT_PRINTF("   Mode %s", g_lorawan_settings.lorawan_enable ? "LPWAN" : "P2P");
-	AT_PRINTF("   Network %s", g_lpwan_has_joined ? "joined" : "not joined");
+	if (g_lorawan_settings.lorawan_enable)
+	{
+		AT_PRINTF("   Auto join %s", g_lorawan_settings.auto_join ? "enabled" : "disabled");
+		AT_PRINTF("   Network %s", g_lpwan_has_joined ? "joined" : "not joined");
+		AT_PRINTF("LPWAN status:");
+		AT_PRINTF("   Dev EUI %02X%02X%02X%02X%02X%02X%02X%02X", g_lorawan_settings.node_device_eui[0], g_lorawan_settings.node_device_eui[1],
+				  g_lorawan_settings.node_device_eui[2], g_lorawan_settings.node_device_eui[3],
+				  g_lorawan_settings.node_device_eui[4], g_lorawan_settings.node_device_eui[5],
+				  g_lorawan_settings.node_device_eui[6], g_lorawan_settings.node_device_eui[7]);
+		AT_PRINTF("   App EUI %02X%02X%02X%02X%02X%02X%02X%02X", g_lorawan_settings.node_app_eui[0], g_lorawan_settings.node_app_eui[1],
+				  g_lorawan_settings.node_app_eui[2], g_lorawan_settings.node_app_eui[3],
+				  g_lorawan_settings.node_app_eui[4], g_lorawan_settings.node_app_eui[5],
+				  g_lorawan_settings.node_app_eui[6], g_lorawan_settings.node_app_eui[7]);
+		AT_PRINTF("   App Key %02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X",
+				  g_lorawan_settings.node_app_key[0], g_lorawan_settings.node_app_key[1],
+				  g_lorawan_settings.node_app_key[2], g_lorawan_settings.node_app_key[3],
+				  g_lorawan_settings.node_app_key[4], g_lorawan_settings.node_app_key[5],
+				  g_lorawan_settings.node_app_key[6], g_lorawan_settings.node_app_key[7],
+				  g_lorawan_settings.node_app_key[8], g_lorawan_settings.node_app_key[9],
+				  g_lorawan_settings.node_app_key[10], g_lorawan_settings.node_app_key[11],
+				  g_lorawan_settings.node_app_key[12], g_lorawan_settings.node_app_key[13],
+				  g_lorawan_settings.node_app_key[14], g_lorawan_settings.node_app_key[15]);
+		AT_PRINTF("   Dev Addr %08lX", g_lorawan_settings.node_dev_addr);
+		AT_PRINTF("   NWS Key %02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X",
+				  g_lorawan_settings.node_nws_key[0], g_lorawan_settings.node_nws_key[1],
+				  g_lorawan_settings.node_nws_key[2], g_lorawan_settings.node_nws_key[3],
+				  g_lorawan_settings.node_nws_key[4], g_lorawan_settings.node_nws_key[5],
+				  g_lorawan_settings.node_nws_key[6], g_lorawan_settings.node_nws_key[7],
+				  g_lorawan_settings.node_nws_key[8], g_lorawan_settings.node_nws_key[9],
+				  g_lorawan_settings.node_nws_key[10], g_lorawan_settings.node_nws_key[11],
+				  g_lorawan_settings.node_nws_key[12], g_lorawan_settings.node_nws_key[13],
+				  g_lorawan_settings.node_nws_key[14], g_lorawan_settings.node_nws_key[15]);
+		AT_PRINTF("   Apps Key %02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X",
+				  g_lorawan_settings.node_apps_key[0], g_lorawan_settings.node_apps_key[1],
+				  g_lorawan_settings.node_apps_key[2], g_lorawan_settings.node_apps_key[3],
+				  g_lorawan_settings.node_apps_key[4], g_lorawan_settings.node_apps_key[5],
+				  g_lorawan_settings.node_apps_key[6], g_lorawan_settings.node_apps_key[7],
+				  g_lorawan_settings.node_apps_key[8], g_lorawan_settings.node_apps_key[9],
+				  g_lorawan_settings.node_apps_key[10], g_lorawan_settings.node_apps_key[11],
+				  g_lorawan_settings.node_apps_key[12], g_lorawan_settings.node_apps_key[13],
+				  g_lorawan_settings.node_apps_key[14], g_lorawan_settings.node_apps_key[15]);
+		AT_PRINTF("   OTAA %s", g_lorawan_settings.otaa_enabled ? "enabled" : "disabled");
+		AT_PRINTF("   ADR %s", g_lorawan_settings.adr_enabled ? "enabled" : "disabled");
+		AT_PRINTF("   %s Network", g_lorawan_settings.public_network ? "Public" : "Private");
+		AT_PRINTF("   Dutycycle %s", g_lorawan_settings.duty_cycle_enabled ? "enabled" : "disabled");
+		AT_PRINTF("   Join trials %d", g_lorawan_settings.join_trials);
+		AT_PRINTF("   TX Power %d", g_lorawan_settings.tx_power);
+		AT_PRINTF("   DR %d", g_lorawan_settings.data_rate);
+		AT_PRINTF("   Class %d", g_lorawan_settings.lora_class);
+		AT_PRINTF("   Subband %d", g_lorawan_settings.subband_channels);
+		AT_PRINTF("   Fport %d", g_lorawan_settings.app_port);
+		AT_PRINTF("   %s Message", g_lorawan_settings.confirmed_msg_enabled ? "Confirmed" : "Unconfirmed");
+		AT_PRINTF("   Region %s", region_names[g_lorawan_settings.lora_region]);
+	}
+	else
+	{
+		AT_PRINTF("   P2P frequency %ld", g_lorawan_settings.p2p_frequency);
+		AT_PRINTF("   P2P TX Power %d", g_lorawan_settings.p2p_tx_power);
+		AT_PRINTF("   P2P BW %s", bandwidths[g_lorawan_settings.p2p_bandwidth]);
+		AT_PRINTF("   P2P SF %d", g_lorawan_settings.p2p_sf);
+		AT_PRINTF("   P2P CR %d", g_lorawan_settings.p2p_cr);
+		AT_PRINTF("   P2P Preamble length %d", g_lorawan_settings.p2p_preamble_len);
+		AT_PRINTF("   P2P Symbol Timeout %d", g_lorawan_settings.p2p_symbol_timeout);
+	}
 	AT_PRINTF("   Send Frequency %ld", g_lorawan_settings.send_repeat_time / 1000);
-	AT_PRINTF("LPWAN status:");
-	AT_PRINTF("   Dev EUI %02X%02X%02X%02X%02X%02X%02X%02X", g_lorawan_settings.node_device_eui[0], g_lorawan_settings.node_device_eui[1],
-			  g_lorawan_settings.node_device_eui[2], g_lorawan_settings.node_device_eui[3],
-			  g_lorawan_settings.node_device_eui[4], g_lorawan_settings.node_device_eui[5],
-			  g_lorawan_settings.node_device_eui[6], g_lorawan_settings.node_device_eui[7]);
-	AT_PRINTF("   App EUI %02X%02X%02X%02X%02X%02X%02X%02X", g_lorawan_settings.node_app_eui[0], g_lorawan_settings.node_app_eui[1],
-			  g_lorawan_settings.node_app_eui[2], g_lorawan_settings.node_app_eui[3],
-			  g_lorawan_settings.node_app_eui[4], g_lorawan_settings.node_app_eui[5],
-			  g_lorawan_settings.node_app_eui[6], g_lorawan_settings.node_app_eui[7]);
-	AT_PRINTF("   App Key %02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X",
-			  g_lorawan_settings.node_app_key[0], g_lorawan_settings.node_app_key[1],
-			  g_lorawan_settings.node_app_key[2], g_lorawan_settings.node_app_key[3],
-			  g_lorawan_settings.node_app_key[4], g_lorawan_settings.node_app_key[5],
-			  g_lorawan_settings.node_app_key[6], g_lorawan_settings.node_app_key[7],
-			  g_lorawan_settings.node_app_key[8], g_lorawan_settings.node_app_key[9],
-			  g_lorawan_settings.node_app_key[10], g_lorawan_settings.node_app_key[11],
-			  g_lorawan_settings.node_app_key[12], g_lorawan_settings.node_app_key[13],
-			  g_lorawan_settings.node_app_key[14], g_lorawan_settings.node_app_key[15]);
-	AT_PRINTF("   Dev Addr %08lX", g_lorawan_settings.node_dev_addr);
-	AT_PRINTF("   NWS Key %02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X",
-			  g_lorawan_settings.node_nws_key[0], g_lorawan_settings.node_nws_key[1],
-			  g_lorawan_settings.node_nws_key[2], g_lorawan_settings.node_nws_key[3],
-			  g_lorawan_settings.node_nws_key[4], g_lorawan_settings.node_nws_key[5],
-			  g_lorawan_settings.node_nws_key[6], g_lorawan_settings.node_nws_key[7],
-			  g_lorawan_settings.node_nws_key[8], g_lorawan_settings.node_nws_key[9],
-			  g_lorawan_settings.node_nws_key[10], g_lorawan_settings.node_nws_key[11],
-			  g_lorawan_settings.node_nws_key[12], g_lorawan_settings.node_nws_key[13],
-			  g_lorawan_settings.node_nws_key[14], g_lorawan_settings.node_nws_key[15]);
-	AT_PRINTF("   Apps Key %02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X",
-			  g_lorawan_settings.node_apps_key[0], g_lorawan_settings.node_apps_key[1],
-			  g_lorawan_settings.node_apps_key[2], g_lorawan_settings.node_apps_key[3],
-			  g_lorawan_settings.node_apps_key[4], g_lorawan_settings.node_apps_key[5],
-			  g_lorawan_settings.node_apps_key[6], g_lorawan_settings.node_apps_key[7],
-			  g_lorawan_settings.node_apps_key[8], g_lorawan_settings.node_apps_key[9],
-			  g_lorawan_settings.node_apps_key[10], g_lorawan_settings.node_apps_key[11],
-			  g_lorawan_settings.node_apps_key[12], g_lorawan_settings.node_apps_key[13],
-			  g_lorawan_settings.node_apps_key[14], g_lorawan_settings.node_apps_key[15]);
-	AT_PRINTF("   OTAA %s", g_lorawan_settings.otaa_enabled ? "enabled" : "disabled");
-	AT_PRINTF("   ADR %s", g_lorawan_settings.adr_enabled ? "enabled" : "disabled");
-	AT_PRINTF("   %s Network", g_lorawan_settings.public_network ? "Public" : "Private");
-	AT_PRINTF("   Dutycycle %s", g_lorawan_settings.duty_cycle_enabled ? "enabled" : "disabled");
-	AT_PRINTF("   Join trials %d", g_lorawan_settings.join_trials);
-	AT_PRINTF("   TX Power %d", g_lorawan_settings.tx_power);
-	AT_PRINTF("   DR %d", g_lorawan_settings.data_rate);
-	AT_PRINTF("   Class %d", g_lorawan_settings.lora_class);
-	AT_PRINTF("   Subband %d", g_lorawan_settings.subband_channels);
-	AT_PRINTF("   Fport %d", g_lorawan_settings.app_port);
-	AT_PRINTF("   %s Message", g_lorawan_settings.confirmed_msg_enabled ? "Confirmed" : "Unconfirmed");
-	AT_PRINTF("   Region %s", region_names[g_lorawan_settings.lora_region]);
-	AT_PRINTF("LoRa P2P status:");
-	AT_PRINTF("   P2P frequency %ld", g_lorawan_settings.p2p_frequency);
-	AT_PRINTF("   P2P TX Power %d", g_lorawan_settings.p2p_tx_power);
-	AT_PRINTF("   P2P BW %s", bandwidths[g_lorawan_settings.p2p_bandwidth]);
-	AT_PRINTF("   P2P SF %d", g_lorawan_settings.p2p_sf);
-	AT_PRINTF("   P2P CR %d", g_lorawan_settings.p2p_cr);
-	AT_PRINTF("   P2P Preamble length %d", g_lorawan_settings.p2p_preamble_len);
-	AT_PRINTF("   P2P Symbol Timeout %d", g_lorawan_settings.p2p_symbol_timeout);
 }
 
 /**
- * @brief Query LoRa mode 
- * 
+ * @brief Query LoRa mode
+ *
  * @return int AT_SUCCESS
  */
 static int at_query_mode(void)
@@ -248,7 +253,7 @@ static int at_exec_mode(char *str)
 
 /**
  * @brief Get current LoRa P2P frequency
- * 
+ *
  * @return int AT_SUCCESS
  */
 static int at_query_p2p_freq(void)
@@ -285,7 +290,7 @@ static int at_exec_p2p_freq(char *str)
 
 /**
  * @brief Get LoRa P2P spreading factor
- * 
+ *
  * @return int AT_SUCCESS
  */
 static int at_query_p2p_sf(void)
@@ -322,7 +327,7 @@ static int at_exec_p2p_sf(char *str)
 
 /**
  * @brief Get current LoRa P2P bandwidth
- * 
+ *
  * @return int AT_SUCCESS
  */
 static int at_query_p2p_bw(void)
@@ -359,7 +364,7 @@ static int at_exec_p2p_bw(char *str)
 
 /**
  * @brief Get current LoRa P2P coding rate
- * 
+ *
  * @return int AT_SUCCESS
  */
 static int at_query_p2p_cr(void)
@@ -396,7 +401,7 @@ static int at_exec_p2p_cr(char *str)
 
 /**
  * @brief Get current LoRa P2P preamble length
- * 
+ *
  * @return int AT_SUCCESS
  */
 static int at_query_p2p_pl(void)
@@ -433,7 +438,7 @@ static int at_exec_p2p_pl(char *str)
 
 /**
  * @brief Get current LoRa P2P TX power
- * 
+ *
  * @return int AT_SUCCESS
  */
 static int at_query_p2p_txp(void)
@@ -470,7 +475,7 @@ static int at_exec_p2p_txp(char *str)
 
 /**
  * @brief Get current LoRa P2P settings
- * 
+ *
  * @return int AT_SUCCESS
  */
 static int at_query_p2p_config(void)
@@ -700,7 +705,7 @@ static int at_exec_p2p_receive(char *str)
 
 /**
  * @brief Get current LoRa P2P receive mode
- * 
+ *
  * @return int AT_SUCCESS
  */
 static int at_query_p2p_receive(void)
@@ -1694,15 +1699,16 @@ static int at_exec_reboot(void)
 
 /**
  * @brief List all device settings
- * 
+ *
  * @return int AT_SUCCESS
  */
 static int at_query_status(void)
 {
+	AT_PRINTF("ATC+STATUS=?");
 	at_settings();
 	snprintf(g_at_query_buf, ATQUERY_SIZE, " ");
 
-	return AT_SUCCESS;
+	return AT_CB_PRINT;
 }
 
 /**
@@ -1734,7 +1740,7 @@ const unsigned char compiler_build_time[] =
 
 /**
  * @brief Get application build data and time
- * 
+ *
  * @return int AT_SUCCESS
  */
 static int at_query_build_time(void)
@@ -1746,7 +1752,7 @@ static int at_query_build_time(void)
 
 /**
  * @brief Get CLI version
- * 
+ *
  * @return int AT_SUCCESS
  */
 static int at_query_cli(void)
@@ -1921,9 +1927,9 @@ static int at_query_retry(void)
 
 /**
  * @brief Set confirmed packet retry rate
- * 
+ *
  * @param str retry rate as char array, valid values: '0' ... '8'
- * @return int 
+ * @return int
  */
 static int at_exec_retry(char *str)
 {
@@ -1948,7 +1954,7 @@ static int at_exec_retry(char *str)
 
 /**
  * @brief Get single channel usage
- * 
+ *
  * @return int AT_SUCCESS
  */
 static int at_query_single(void)
@@ -2211,7 +2217,6 @@ static int at_exec_list_all(void)
 	if (&g_user_at_cmd_list != 0)
 	{
 
-
 		for (unsigned int idx = 0; idx < g_user_at_cmd_num; idx++)
 		{
 			AT_PRINTF("ATC%s,%s: %s", g_user_at_cmd_list[idx].cmd_name, g_user_at_cmd_list[idx].permission != NULL ? g_user_at_cmd_list[idx].permission : "RW", g_user_at_cmd_list[idx].cmd_desc);
@@ -2287,7 +2292,7 @@ static void at_cmd_handle(void)
 				if (strncmp(g_at_cmd_list[i].cmd_desc, "OK", 2) == 0)
 				{
 					snprintf(atcmd, ATCMD_SIZE, "\nOK");
-					snprintf(cmd_result, ATCMD_SIZE," ");
+					snprintf(cmd_result, ATCMD_SIZE, " ");
 				}
 				else
 				{
