@@ -790,14 +790,14 @@ static int at_exec_mask(char *str)
 		return AT_ERRNO_NOALLOW;
 	}
 	char *param;
-	uint8_t mask;
+	uint16_t mask;
 
 	param = strtok(str, ",");
 	if (param != NULL)
 	{
 		mask = strtol(param, NULL, 0);
 
-		uint8_t maxBand = 1;
+		uint16_t maxBand = 1;
 		switch (g_lorawan_settings.lora_region)
 		{
 		case LORAMAC_REGION_AU915:

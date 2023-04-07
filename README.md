@@ -1175,6 +1175,8 @@ AT Command functions: Taylor Lee (taylor.lee@rakwireless.com)
 ----
 # Changelog
 [Code releases](CHANGELOG.md)
+- 2023-04-07
+  - Fix value overflow in AT command AT+MASK
 - 2023-03-18
   - Change status output (separate LoRaWAN and P2P)
 - 2023-02-16
