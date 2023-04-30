@@ -2214,7 +2214,7 @@ static atcmd_t g_at_cmd_list[] = {
 	// Custom AT commands
 	{"+STATUS", "Status, Show LoRaWAN status", at_query_status, NULL, NULL, "R"},
 	{"+SENDINT", "Send interval, Get or Set the automatic send interval", at_query_sendint, at_exec_sendint, NULL, "RW"},
-	{"+PORT", "Get or Set the Port=[1..223]", at_query_port, at_exec_port, NULL},
+	{"+PORT", "Get or Set the Port=[1..223]", at_query_port, at_exec_port, NULL, "RW"},
 };
 /**
 
