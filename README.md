@@ -183,45 +183,85 @@ ATC+STATUS?
 ATC+STATUS: Show LoRaWAN status
 OK
 
+// When in LoRaWAN mode:
+
 ATC+STATUS=?
 Device status:
-    RAK4631
-    Auto join enabled
-    Mode LPWAN
-    Network joined
-    Send Frequency 300
- LPWAN status:
-    Dev EUI AC1F09FFFE08E887
-    App EUI 70B3D57ED00201E1
-    App Key 2B84E0B09B68E5CB42176FE753DCEE79
-    Dev Addr 26021FB4
-    NWS Key 323D155A000DF335307A16DA0C9DF53F
-    Apps Key 3F6A66459D5EDCA63CBC4619CD61A11E
-    OTAA enabled
-    ADR disabled
-    Public Network
-    Dutycycle disabled
-    Join trials 5
-    TX Power 0
-    DR 3
-    Class 0
-    Subband 1
-    Fport 2
-    Unconfirmed Message
-    Region AS923-3
- LoRa P2P status:
-    P2P frequency 916000000
-    P2P TX Power 22
-    P2P BW 125
-    P2P SF 7
-    P2P CR 1
-    P2P Preamble length 8
-    P2P Symbol Timeout 0
+   RAK4631
+   Mode LPWAN
+   Auto join enabled
+   Network joined
+LPWAN status:
+   Dev EUI AC1F09FFFE09016C
+   App EUI 70B3D57ED00201E1
+   App Key 2B84E0B09B68E5CB42176FE753DCEE79
+   Dev Addr 26021FB4
+   NWS Key 323D155A000DF335307A16DA0C9DF53F
+   Apps Key 3F6A66459D5EDCA63CBC4619CD61A11E
+   OTAA enabled
+   ADR disabled
+   Public Network
+   Dutycycle disabled
+   Join trials 5
+   TX Power 0
+   DR 3
+   Class 0
+   Subband 1
+   Fport 2
+   Unconfirmed Message
+   Region AS923-3
+   Send Frequency 300
 
-AT+STATUS= 
+// When in LoRa P2P mode:
+
+ATC+STATUS=?
+Device status:
+   RAK4631
+   Mode P2P
+   P2P frequency 916000000
+   P2P TX Power 22
+   P2P BW 125
+   P2P SF 7
+   P2P CR 0
+   P2P Preamble length 8
+   P2P Symbol Timeout 0
+   Send Frequency 300
+
+```
+
+----
+
+## ATC+PORT
+
+Description: Port settings
+
+This command allows the user to access and configure port settings.
+
+| Command                     | Input Parameter    | Return Value                              | Return Code            |
+| --------------------------- | ------------------ | ----------------------------------------- | ---------------------- |
+| ATC+PORT?                    | -                  | `AT+PORT=<Port><CR>. Get or Set the Port` | `OK`                   |
+| ATC+PORT=?                   | -                  | 1-223                                     | OK                     |
+| ATC+PORT=`<Input Parameter>` | 1-223              | -                                         | OK *or* AT_PARAM_ERROR |
+
+**Examples**:
+
+```
+ATC+PORT?
+
+ATC+PORT: Get or Set the Port=[1..223]
+OK
+
+ATC+PORT=?
+
+ATC+PORT:2
+OK
+
+ATC+PORT=2
 
 OK
 ```
+
+[Back](#content)    
 
 ----
 
