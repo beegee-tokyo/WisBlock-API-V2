@@ -4,6 +4,9 @@ Arduino library for RAKWireless WisBlock Core modules that takes all the LoRaWAN
 
 # Release Notes
 
+## 2.0.4 Add AT command
+  - Add AT command to change fPort when using LoRaWAN. Thanks to @xoseperez
+
 ## 2.0.3 Fix value overflow
   - Fix value overflow in AT command AT+MASK
 ## 2.0.2 Fix P2P bandwidths

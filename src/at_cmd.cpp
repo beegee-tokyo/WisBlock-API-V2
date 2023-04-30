@@ -1508,6 +1508,44 @@ static int at_exec_adr(char *str)
 }
 
 /**
+ * @brief AT+PORT=? Get current port
+ *
+ * @return int
+ */
+static int at_query_port(void)
+{
+	snprintf(g_at_query_buf, ATQUERY_SIZE, "%d", g_lorawan_settings.app_port);
+	return AT_SUCCESS;
+}
+
+/**
+ * @brief AT+PORT=X Set port
+ *
+ * @param str 1 to 224
+ * @return int 0 if correct parameter
+ */
+static int at_exec_port(char *str)
+{
+	if (!g_lorawan_settings.lorawan_enable)
+	{
+		return AT_ERRNO_NOALLOW;
+	}
+	uint8_t port;
+
+	port = strtol(str, NULL, 0);
+
+	if ((port < 1) || (port > 223))
+	{
+		return AT_ERRNO_PARA_VAL;
+	}
+
+	g_lorawan_settings.app_port = port;
+	save_settings();
+
+	return AT_SUCCESS;
+}
+
+/**
  * @brief AT+TXP=? Get current TX power setting
  *
  * @return int AT_SUCCESS;
@@ -2176,6 +2214,7 @@ static atcmd_t g_at_cmd_list[] = {
 	// Custom AT commands
 	{"+STATUS", "Status, Show LoRaWAN status", at_query_status, NULL, NULL, "R"},
 	{"+SENDINT", "Send interval, Get or Set the automatic send interval", at_query_sendint, at_exec_sendint, NULL, "RW"},
+	{"+PORT", "Get or Set the Port=[1..223]", at_query_port, at_exec_port, NULL},
 };
 /**
 
@@ -2204,7 +2243,7 @@ static int at_exec_list_all(void)
 
 	for (unsigned int idx = 1; idx < sizeof(g_at_cmd_list) / sizeof(atcmd_t); idx++)
 	{
-		if ((strcmp(g_at_cmd_list[idx].cmd_name, (char *)"+STATUS") == 0) || (strcmp(g_at_cmd_list[idx].cmd_name, (char *)"+SENDINT") == 0))
+		if ((strcmp(g_at_cmd_list[idx].cmd_name, (char *)"+STATUS") == 0) || (strcmp(g_at_cmd_list[idx].cmd_name, (char *)"+SENDINT") == 0) || (strcmp(g_at_cmd_list[idx].cmd_name, (char *)"+PORT") == 0))
 		{
 			AT_PRINTF("ATC%s,%s: %s", g_at_cmd_list[idx].cmd_name, g_at_cmd_list[idx].permission, g_at_cmd_list[idx].cmd_desc);
 		}
