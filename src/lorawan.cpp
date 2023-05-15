@@ -181,10 +181,13 @@ int8_t init_lorawan(void)
 	// Initialize the app timer
 	api_timer_init();
 
-	API_LOG("LORA", "Start Join");
-	// Start Join process
-	lmh_join();
-
+	/// \todo Join should be only started if g_lorawan_settings.auto_join is true.
+	if (g_lorawan_settings.auto_join)
+	{
+		API_LOG("LORA", "Start Join");
+		// Start Join process
+		lmh_join();
+	}
 	g_lorawan_initialized = true;
 	return 0;
 }

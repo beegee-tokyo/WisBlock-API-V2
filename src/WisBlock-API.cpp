@@ -199,17 +199,12 @@ void setup()
 		if (lora_init_result != 0)
 		{
 			API_LOG("API", "Init LoRa failed");
-
-			// Without working LoRa we just stop here
-			while (1)
-			{
-				API_LOG("API", "Get your LoRa stuff in order");
-				pinMode(LED_GREEN, OUTPUT);
-				digitalWrite(LED_GREEN, !digitalRead(LED_GREEN));
-				delay(5000);
-			}
+			API_LOG("API", "Get your LoRa stuff in order");
 		}
-		API_LOG("API", "LoRa init success");
+		else
+		{
+			API_LOG("API", "LoRa init success");
+		}
 	}
 	else
 	{
@@ -226,20 +221,6 @@ void setup()
 	{
 		// Without working application we give a warning message
 		API_LOG("API", "Get your application stuff in order");
-		// // Without working LoRa we just stop here
-		// while (1)
-		// {
-		// 	API_LOG("MAIN", "Get your application stuff in order");
-		// 	AT_PRINTF("+EVT:HW Failure");
-		// 	pinMode(LED_GREEN, OUTPUT);
-		// 	digitalWrite(LED_GREEN, !digitalRead(LED_GREEN));
-		// 	while (Serial.available() > 0)
-		// 	{
-		// 		at_serial_input(uint8_t(Serial.read()));
-		// 		delay(5);
-		// 	}
-		// 	delay(5000);
-		// }
 	}
 }
 
@@ -320,12 +301,5 @@ void loop()
 		digitalWrite(LED_GREEN, LOW);
 		delay(10);
 		// Go back to sleep
-#if defined NRF52_SERIES || defined ESP32
-
-		xSemaphoreTake(g_task_sem, 10);
-#endif
-#ifdef ARDUINO_ARCH_RP2040
-		yield();
-#endif
 	}
 }

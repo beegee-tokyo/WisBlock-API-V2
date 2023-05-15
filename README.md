@@ -1215,6 +1215,8 @@ AT Command functions: Taylor Lee (taylor.lee@rakwireless.com)
 ----
 # Changelog
 [Code releases](CHANGELOG.md)
+- 2023-05-15
+  - Some clean-up and improvement (e.g. no hang if LoRa init fails)
 - 2023-04-30
   - Added option to set the LoRaWAN port using the AT command set. Thanks to @xoseperez## 2.0.5 Fix new AT command
   - Fix wrong implementation of AT+PORT command

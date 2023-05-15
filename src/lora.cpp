@@ -69,10 +69,10 @@ int8_t init_lora(void)
 					  g_lorawan_settings.p2p_symbol_timeout, false,
 					  0, true, 0, 0, false, true);
 
+	// LoRa is setup, start the timer that will wakeup the loop frequently
+	api_timer_init();
 	if (g_lorawan_settings.send_repeat_time != 0)
 	{
-		// LoRa is setup, start the timer that will wakeup the loop frequently
-		api_timer_init();
 		api_timer_start();
 	}
 

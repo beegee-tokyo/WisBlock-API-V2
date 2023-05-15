@@ -52,6 +52,7 @@
 #include <Arduino.h>
 #include <LoRaWan-Arduino.h>
 #include "wisblock_cayenne.h"
+#include <Wire.h>
 
 #ifdef NRF52_SERIES
 #include <nrf_nvic.h>
