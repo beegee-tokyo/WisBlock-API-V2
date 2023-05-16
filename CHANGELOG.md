@@ -4,6 +4,8 @@ Arduino library for RAKWireless WisBlock Core modules that takes all the LoRaWAN
 
 # Release Notes
 
+## 2.0.7 Add new CayenneLPP type for device ID (for Hummingbird PoC)
+
 ## 2.0.6 Some clean-up and improvement (e.g. no hang if LoRa init fails)
 
 ## 2.0.5 Fix new AT command

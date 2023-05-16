@@ -16,6 +16,7 @@
 #include <CayenneLPP.h>
 
 // Additional value ID's
+#define WB_DEV_ID 255	  // 4 byte device ID
 #define LPP_GPS4 136	  // 3 byte lon/lat 0.0001 °, 3 bytes alt 0.01 meter (Cayenne LPP default)
 #define LPP_GPS6 137	  // 4 byte lon/lat 0.000001 °, 3 bytes alt 0.01 meter (Customized Cayenne LPP)
 #define LPP_VOC 138		  // 2 byte VOC index
@@ -36,8 +37,10 @@
 #define LPP_GPST_SIZE 10
 #define LPP_VOC_SIZE 2
 #define SH_SIZE_2 2
+#define WB_DEV_ID_SIZE 4
 
 // Cayenne LPP Channel numbers per sensor value used in WisBlock API examples
+#define LPP_CHANNEL_DEVID 0			   // Device ID, only used in LoRa P2P
 #define LPP_CHANNEL_BATT 1			   // Base Board
 #define LPP_CHANNEL_HUMID 2			   // RAK1901
 #define LPP_CHANNEL_TEMP 3			   // RAK1901
@@ -109,6 +112,7 @@ public:
 	uint8_t addGNSS_T(int32_t latitude, int32_t longitude, int16_t altitude, float accuracy, int8_t sats);
 	uint8_t addVoc_index(uint8_t channel, uint32_t voc_index);
 	uint8_t addSH_2_value(uint8_t channel, uint8_t data_type, float value);
+	uint8_t addDevID(uint8_t channel, uint8_t *dev_id);
 
 private:
 };

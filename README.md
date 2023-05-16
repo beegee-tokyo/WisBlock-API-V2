@@ -1215,6 +1215,8 @@ AT Command functions: Taylor Lee (taylor.lee@rakwireless.com)
 ----
 # Changelog
 [Code releases](CHANGELOG.md)
+- 2023-05-16
+  - Add new CayenneLPP type for device ID (for Hummingbird PoC)
 - 2023-05-15
   - Some clean-up and improvement (e.g. no hang if LoRa init fails)
 - 2023-04-30

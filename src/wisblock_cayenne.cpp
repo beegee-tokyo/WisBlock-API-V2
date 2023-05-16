@@ -16,8 +16,8 @@ union int_union_s
 	uint16_t val16 = 0;
 	uint8_t val8[2];
 };
-/** Latitude/Longitude value union */
-union latLong_s
+/** 32bit value union */
+union long_union_s
 {
 	int32_t val32;
 	int8_t val8[4];
@@ -43,7 +43,7 @@ uint8_t WisCayenne::addGNSS_4(uint8_t channel, int32_t latitude, int32_t longitu
 	_buffer[_cursor++] = channel;
 	_buffer[_cursor++] = LPP_GPS4;
 
-	latLong_s pos_union;
+	long_union_s pos_union;
 
 	// Save default Cayenne LPP precision
 	pos_union.val32 = latitude / 1000; // Cayenne LPP 0.0001 ° Signed MSB
@@ -86,7 +86,7 @@ uint8_t WisCayenne::addGNSS_6(uint8_t channel, int32_t latitude, int32_t longitu
 	_buffer[_cursor++] = channel;
 	_buffer[_cursor++] = LPP_GPS6;
 
-	latLong_s pos_union;
+	long_union_s pos_union;
 
 	pos_union.val32 = latitude / 10; // Custom 0.000001 ° Signed MSB
 	_buffer[_cursor++] = pos_union.val8[3];
@@ -129,7 +129,7 @@ uint8_t WisCayenne::addGNSS_H(int32_t latitude, int32_t longitude, int16_t altit
 		return 0;
 	}
 
-	latLong_s pos_union;
+	long_union_s pos_union;
 
 	pos_union.val32 = latitude / 100; // Custom 0.00001 ° Signed MSB
 	_buffer[_cursor++] = pos_union.val8[0];
@@ -279,6 +279,14 @@ uint8_t WisCayenne::addVoc_index(uint8_t channel, uint32_t voc_index)
 	return _cursor;
 }
 
+/**
+ * @brief Add SensorHub values to the payload
+ *
+ * @param channel LPP channel
+ * @param data_type LPP data type
+ * @param value Sensor value
+ * @return uint8_t bytes added to the data packet
+ */
 uint8_t WisCayenne::addSH_2_value(uint8_t channel, uint8_t data_type, float value)
 {
 	// check buffer overflow
@@ -316,6 +324,32 @@ uint8_t WisCayenne::addSH_2_value(uint8_t channel, uint8_t data_type, float valu
 	value_union.val16 = value * multiplier; // SensorHub value
 	_buffer[_cursor++] = value_union.val8[1];
 	_buffer[_cursor++] = value_union.val8[0];
+
+	return _cursor;
+}
+
+/**
+ * @brief Add device ID to payload
+ *
+ * @param channel LPP channel
+ * @param dev_id pointer to 4 byte long array with the device ID
+ * @return uint8_t bytes added to the data packet
+ */
+uint8_t WisCayenne::addDevID(uint8_t channel, uint8_t *dev_id)
+{
+	// check buffer overflow
+	if ((_cursor + WB_DEV_ID_SIZE + 2) > _maxsize)
+	{
+		_error = LPP_ERROR_OVERFLOW;
+		return 0;
+	}
+	_buffer[_cursor++] = channel;
+	_buffer[_cursor++] = WB_DEV_ID;
+
+	_buffer[_cursor++] = dev_id[0];
+	_buffer[_cursor++] = dev_id[1];
+	_buffer[_cursor++] = dev_id[2];
+	_buffer[_cursor++] = dev_id[3];
 
 	return _cursor;
 }
