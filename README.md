@@ -1215,6 +1215,8 @@ AT Command functions: Taylor Lee (taylor.lee@rakwireless.com)
 ----
 # Changelog
 [Code releases](CHANGELOG.md)
+- 2023-05-20
+  - Add AT+BOOT command to force DFU/UF2 bootloader mode
 - 2023-05-16
   - Add new CayenneLPP type for device ID (for Hummingbird PoC)
 - 2023-05-15

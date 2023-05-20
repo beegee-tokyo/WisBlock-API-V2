@@ -1760,6 +1760,17 @@ static int at_exec_restore(void)
 	return AT_SUCCESS;
 }
 
+/**
+ * @brief AT+BOOT force into DFU/UF2 mode
+ *
+ * @return int AT_SUCCESS
+ */
+static int at_exec_dfu(void)
+{
+	NRF_POWER->GPREGRET = 0x57; // 0xA8 OTA, 0x4e Serial, 0x57 UF2
+	NVIC_SystemReset();			// or sd_nvic_SystemReset();
+}
+
 /** Application build time */
 const unsigned char compiler_build_time[] =
 	{
@@ -2186,6 +2197,7 @@ static atcmd_t g_at_cmd_list[] = {
 	{"+PSEND", "P2P send data", NULL, at_exec_p2p_send, NULL, "W"},
 	{"+PRECV", "P2P receive mode", at_query_p2p_receive, at_exec_p2p_receive, NULL, "RW"},
 	// WisToolBox compatibility
+	{"+BOOT", "Force bootloader mode", NULL, NULL, at_exec_dfu, "R"},
 	{"+BUILDTIME", "Get Build time", at_query_build_time, NULL, NULL, "R"},
 	{"+CLIVER", "Get the version of the AT command", at_query_cli, NULL, NULL, "R"},
 	{"+APIVER", "Get the version of the API", at_query_api, NULL, NULL, "R"},
