@@ -33,8 +33,10 @@ bool g_enable_ble = false;
  */
 void periodic_wakeup(TimerHandle_t unused)
 {
+#ifndef _CUSTOM_BOARD_
 	// Switch on LED to show we are awake
 	digitalWrite(LED_GREEN, HIGH);
+#endif
 	api_wake_loop(STATUS);
 }
 #endif
@@ -56,8 +58,10 @@ volatile uint16_t g_task_event_type = NO_EVENT;
  */
 void periodic_wakeup(void)
 {
+#ifndef _CUSTOM_BOARD_
 	// Switch on LED to show we are awake
 	digitalWrite(LED_GREEN, HIGH);
+#endif
 	api_wake_loop(STATUS);
 }
 #endif
@@ -82,8 +86,10 @@ bool g_enable_ble = false;
  */
 void periodic_wakeup(void)
 {
+#ifndef _CUSTOM_BOARD_
 	// Switch on LED to show we are awake
 	digitalWrite(LED_GREEN, HIGH);
+#endif
 	api_wake_loop(STATUS);
 }
 #endif
@@ -102,6 +108,7 @@ void setup()
 	xSemaphoreGive(g_task_sem);
 #endif
 
+#ifndef _CUSTOM_BOARD_
 	// Initialize the built in LED
 	pinMode(LED_GREEN, OUTPUT);
 	digitalWrite(LED_GREEN, LOW);
@@ -109,6 +116,7 @@ void setup()
 	// Initialize the connection status LED
 	pinMode(LED_BLUE, OUTPUT);
 	digitalWrite(LED_BLUE, HIGH);
+#endif
 
 #if API_DEBUG > 0
 	// Initialize Serial for debug output
@@ -121,7 +129,9 @@ void setup()
 		if ((millis() - serial_timeout) < 5000)
 		{
 			delay(100);
+#ifndef _CUSTOM_BOARD_
 			digitalWrite(LED_GREEN, !digitalRead(LED_GREEN));
+#endif
 		}
 		else
 		{
@@ -133,7 +143,9 @@ void setup()
 #ifdef ESP32
 	Serial.onReceive(usb_rx_cb);
 #endif
+#ifndef _CUSTOM_BOARD_
 	digitalWrite(LED_GREEN, HIGH);
+#endif
 
 	// Call app setup for special settings
 	setup_app();
@@ -162,16 +174,20 @@ void setup()
 	}
 	else
 	{
+#ifndef _CUSTOM_BOARD_
 		// BLE is not activated, switch off blue LED
 		digitalWrite(LED_BLUE, LOW);
+#endif
 	}
 
 	// Take the semaphore so the loop will go to sleep until an event happens
 	xSemaphoreTake(g_task_sem, 10);
 #endif
 #ifdef ARDUINO_ARCH_RP2040
+#ifndef _CUSTOM_BOARD_
 	// RAK11310 does not have BLE, switch off blue LED
 	digitalWrite(LED_BLUE, LOW);
+#endif
 #endif
 
 	// If P2P mode, override auto join setting
@@ -236,8 +252,10 @@ void loop()
 	// Sleep until we are woken up by an event
 	api_wait_wake();
 	{
+#ifndef _CUSTOM_BOARD_
 		// Switch on green LED to show we are awake
 		digitalWrite(LED_GREEN, HIGH);
+#endif
 		while (g_task_event_type != NO_EVENT)
 		{
 			// Application specific event handler (timer event or others)
@@ -297,9 +315,11 @@ void loop()
 		}
 		Serial.flush();
 		g_task_event_type = 0;
+#ifndef _CUSTOM_BOARD_
 		// Switch off blue LED to show we go to sleep
 		digitalWrite(LED_GREEN, LOW);
 		delay(10);
+#endif
 		// Go back to sleep
 	}
 }

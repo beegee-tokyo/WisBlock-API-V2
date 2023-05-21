@@ -92,7 +92,9 @@ int8_t init_lora(void)
 		break;
 	}
 
+#ifndef _CUSTOM_BOARD_
 	digitalWrite(LED_GREEN, LOW);
+#endif
 
 	g_lorawan_initialized = true;
 	g_lpwan_has_joined = true;
@@ -282,8 +284,10 @@ bool send_p2p_packet(uint8_t *data, uint8_t size)
 	Radio.Sleep();
 	Radio.SetCadParams(LORA_CAD_08_SYMBOL, g_lorawan_settings.p2p_sf + 13, 10, LORA_CAD_ONLY, 0);
 
+#ifndef _CUSTOM_BOARD_
 	// Switch on Indicator lights
 	digitalWrite(LED_GREEN, HIGH);
+#endif
 
 	// Start CAD
 	Radio.StartCad();

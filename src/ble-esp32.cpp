@@ -67,7 +67,9 @@ uint16_t _timeout;
 
 void toggle_blue_led(void)
 {
+#ifndef _CUSTOM_BOARD_
 	digitalWrite(LED_BLUE, !digitalRead(LED_BLUE));
+#endif
 }
 
 /**
@@ -86,7 +88,9 @@ class MyServerCallbacks : public BLEServerCallbacks
 		advertising_timer.detach();
 		blue_led_timer.detach();
 		g_ble_uart_is_connected = true;
+#ifndef _CUSTOM_BOARD_
 		digitalWrite(LED_BLUE, HIGH);
+#endif
 	};
 
 	/**
@@ -101,7 +105,9 @@ class MyServerCallbacks : public BLEServerCallbacks
 		ble_advertising->start();
 		advertising_timer.once(_timeout, stop_ble_adv);
 		blue_led_timer.attach(1, toggle_blue_led);
+#ifndef _CUSTOM_BOARD_
 		digitalWrite(LED_BLUE, LOW);
+#endif
 	}
 };
 
@@ -452,7 +458,9 @@ void restart_advertising(uint16_t timeout)
 	if (timeout != 0)
 	{
 		advertising_timer.once(timeout, stop_ble_adv);
+#ifndef _CUSTOM_BOARD_
 		blue_led_timer.attach(1, toggle_blue_led);
+#endif
 	}
 	ble_advertising->start(timeout);
 	g_ble_is_on = true;
@@ -465,7 +473,9 @@ void stop_ble_adv(void)
 {
 	advertising_timer.detach();
 	blue_led_timer.detach();
+#ifndef _CUSTOM_BOARD_
 	digitalWrite(LED_BLUE, LOW);
+#endif
 	/// \todo needs patch in BLEAdvertising.cpp -> handleGAPEvent() -> remove start(); from ESP_GAP_BLE_ADV_STOP_COMPLETE_EVT
 	ble_advertising->stop();
 	g_ble_is_on = false;

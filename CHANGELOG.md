@@ -4,6 +4,9 @@ Arduino library for RAKWireless WisBlock Core modules that takes all the LoRaWAN
 
 # Release Notes
 
+## 2.0.9 Enhancements
+  - Enhance AT+BOOT to work with RP2040
+  - Add option for custom boards (no LED's no BLE advertising)
 ## 2.0.8 Add AT+BOOT command to force DFU/UF2 bootloader mode
 
 ## 2.0.7 Add new CayenneLPP type for device ID (for Hummingbird PoC)

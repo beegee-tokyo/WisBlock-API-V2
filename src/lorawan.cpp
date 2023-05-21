@@ -215,7 +215,9 @@ void lpwan_join_fail_handler(void)
  */
 static void lpwan_joined_handler(void)
 {
+#ifndef _CUSTOM_BOARD_
 	digitalWrite(LED_GREEN, LOW);
+#endif
 
 	otaaDevAddr = lmh_getDevAddr();
 

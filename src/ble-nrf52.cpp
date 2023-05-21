@@ -60,27 +60,21 @@ void init_ble(void)
 
 #if NO_BLE_LED > 0
 	Bluefruit.autoConnLed(false);
+#ifndef _CUSTOM_BOARD_
 	digitalWrite(LED_BLUE, LOW);
+#endif
 #endif
 
 	// Create device name
 	char helper_string[256] = {0};
 
-	// uint32_t addr_high = ((*((uint32_t *)(0x100000a8))) & 0x0000ffff) | 0x0000c000;
-	// uint32_t addr_low = *((uint32_t *)(0x100000a4));
 #ifdef _VARIANT_ISP4520_
 	/** Device name for ISP4520 */
-	// sprintf(helper_string, "%s-%02X%02X%02X%02X%02X%02X", g_ble_dev_name,
-	// 		(uint8_t)(addr_high), (uint8_t)(addr_high >> 8), (uint8_t)(addr_low),
-	// 		(uint8_t)(addr_low >> 8), (uint8_t)(addr_low >> 16), (uint8_t)(addr_low >> 24));
 	sprintf(helper_string, "%s-%02X%02X%02X%02X%02X%02X", g_ble_dev_name,
 			(uint8_t)(g_lorawan_settings.node_device_eui[2]), (uint8_t)(g_lorawan_settings.node_device_eui[3]),
 			(uint8_t)(g_lorawan_settings.node_device_eui[4]), (uint8_t)(g_lorawan_settings.node_device_eui[5]), (uint8_t)(g_lorawan_settings.node_device_eui[6]), (uint8_t)(g_lorawan_settings.node_device_eui[7]));
 #else
 	/** Device name for RAK4631 */
-	// sprintf(helper_string, "%s-%02X%02X%02X%02X%02X%02X", g_ble_dev_name,
-	// 		(uint8_t)(addr_high), (uint8_t)(addr_high >> 8), (uint8_t)(addr_low),
-	// 		(uint8_t)(addr_low >> 8), (uint8_t)(addr_low >> 16), (uint8_t)(addr_low >> 24));
 	sprintf(helper_string, "%s-%02X%02X%02X%02X%02X%02X", g_ble_dev_name,
 			(uint8_t)(g_lorawan_settings.node_device_eui[2]), (uint8_t)(g_lorawan_settings.node_device_eui[3]),
 			(uint8_t)(g_lorawan_settings.node_device_eui[4]), (uint8_t)(g_lorawan_settings.node_device_eui[5]), (uint8_t)(g_lorawan_settings.node_device_eui[6]), (uint8_t)(g_lorawan_settings.node_device_eui[7]));
@@ -138,6 +132,9 @@ void init_ble(void)
 	Bluefruit.Advertising.restartOnDisconnect(true);
 	Bluefruit.Advertising.setInterval(32, 244); // in unit of 0.625 ms
 	Bluefruit.Advertising.setFastTimeout(15);	// number of seconds in fast mode
+
+// On custom boards advertising has to be started automatically
+#ifndef _CUSTOM_BOARD_
 	// Bluefruit.Advertising.start(60);			// 0 = Don't stop advertising
 	if (g_lorawan_settings.auto_join)
 	{
@@ -147,6 +144,7 @@ void init_ble(void)
 	{
 		restart_advertising(0);
 	}
+#endif
 }
 
 /**

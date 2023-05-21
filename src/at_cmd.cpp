@@ -1767,8 +1767,17 @@ static int at_exec_restore(void)
  */
 static int at_exec_dfu(void)
 {
+#if defined NRF52_SERIES
 	NRF_POWER->GPREGRET = 0x57; // 0xA8 OTA, 0x4e Serial, 0x57 UF2
 	NVIC_SystemReset();			// or sd_nvic_SystemReset();
+#endif
+#if defined ESP32
+	// No way to go into bootloader programmatically
+	ESP.restart();
+#endif
+#ifdef ARDUINO_ARCH_RP2040
+	_ontouch1200bps_();
+#endif
 }
 
 /** Application build time */

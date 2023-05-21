@@ -1215,6 +1215,9 @@ AT Command functions: Taylor Lee (taylor.lee@rakwireless.com)
 ----
 # Changelog
 [Code releases](CHANGELOG.md)
+- 2023-05-21
+  - Enhance AT+BOOT to work with RP2040 
+  - Add option for custom boards (no LED's no BLE advertising)
 - 2023-05-20
   - Add AT+BOOT command to force DFU/UF2 bootloader mode
 - 2023-05-16
