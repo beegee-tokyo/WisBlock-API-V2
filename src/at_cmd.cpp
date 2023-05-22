@@ -1884,10 +1884,17 @@ static int at_query_lpm(void)
  */
 static int at_query_alias(void)
 {
-	snprintf(g_at_query_buf, ATQUERY_SIZE, "WisBlock API %02X%02X%02X%02X%02X%02X%02X%02X", g_lorawan_settings.node_device_eui[0], g_lorawan_settings.node_device_eui[1],
-			 g_lorawan_settings.node_device_eui[2], g_lorawan_settings.node_device_eui[3],
-			 g_lorawan_settings.node_device_eui[4], g_lorawan_settings.node_device_eui[5],
-			 g_lorawan_settings.node_device_eui[6], g_lorawan_settings.node_device_eui[7]);
+	if (g_has_alias)
+	{
+		snprintf(g_at_query_buf, ATQUERY_SIZE, "WisBlock API %s", g_alias);
+	}
+	else
+	{
+		snprintf(g_at_query_buf, ATQUERY_SIZE, "WisBlock API %02X%02X%02X%02X%02X%02X%02X%02X", g_lorawan_settings.node_device_eui[0], g_lorawan_settings.node_device_eui[1],
+				 g_lorawan_settings.node_device_eui[2], g_lorawan_settings.node_device_eui[3],
+				 g_lorawan_settings.node_device_eui[4], g_lorawan_settings.node_device_eui[5],
+				 g_lorawan_settings.node_device_eui[6], g_lorawan_settings.node_device_eui[7]);
+	}
 	return AT_SUCCESS;
 }
 

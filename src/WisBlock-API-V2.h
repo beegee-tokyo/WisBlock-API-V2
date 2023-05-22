@@ -13,7 +13,7 @@
 
 #define WISBLOCK_API_VER 2
 #define WISBLOCK_API_VER2 0
-#define WISBLOCK_API_VER3 0
+#define WISBLOCK_API_VER3 10
 #ifndef NO_BLE_LED
 // Set usage of BLE connection LED (blue). Comment the line to enable LED
 #define NO_BLE_LED 1
@@ -384,7 +384,9 @@ void api_timer_start(void);
 void api_timer_stop(void);
 void api_timer_restart(uint32_t new_time);
 void api_log_settings(void);
-
+void api_set_alias(String alias_string);
+extern char g_alias[];
+extern bool g_has_alias;
 extern const char settings_name[];
 
 #ifdef NRF52_SERIES

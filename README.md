@@ -1215,6 +1215,9 @@ AT Command functions: Taylor Lee (taylor.lee@rakwireless.com)
 ----
 # Changelog
 [Code releases](CHANGELOG.md)
+
+- 2023-05-22 Enhance AT commands
+  - Add option to set device alias
 - 2023-05-21
   - Enhance AT+BOOT to work with RP2040 
   - Add option for custom boards (no LED's no BLE advertising)

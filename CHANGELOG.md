@@ -4,6 +4,9 @@ Arduino library for RAKWireless WisBlock Core modules that takes all the LoRaWAN
 
 # Release Notes
 
+## 2.0.10 Enhance AT commands
+  - Add option to set device alias
+
 ## 2.0.9 Enhancements
   - Enhance AT+BOOT to work with RP2040
   - Add option for custom boards (no LED's no BLE advertising)

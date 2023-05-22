@@ -29,6 +29,23 @@ uint16_t g_sw_ver_3 = SW_VERSION_3; // patch version increase on bugfix, no affe
 uint16_t g_sw_ver_3 = 0; // patch version increase on bugfix, no affect on API
 #endif
 
+/** Buffer for device alias (WisToolBox) */
+char g_alias[16] = {0x00};
+
+/** Flag if device alias has been set */
+bool g_has_alias = false;
+
+/**
+ * @brief Set device alias
+ *        Will not be saved in flash memory
+ * @param alias_string new alias name as string, max length 15 chars
+ */
+void api_set_alias(String alias_string)
+{
+	snprintf(g_alias, 15, alias_string.c_str());
+	g_has_alias = true;
+}
+
 /**
  * @brief Set application version
  *
