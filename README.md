@@ -1216,6 +1216,8 @@ AT Command functions: Taylor Lee (taylor.lee@rakwireless.com)
 # Changelog
 [Code releases](CHANGELOG.md)
 
+- 2023-06-23 Fix CR bug
+  - CR values are different between SX126x-Arduino and RUI3
 - 2023-05-22 Enhance AT commands
   - Add option to set device alias
 - 2023-05-21

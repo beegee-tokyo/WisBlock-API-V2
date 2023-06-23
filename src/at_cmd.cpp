@@ -191,7 +191,7 @@ void at_settings(void)
 		AT_PRINTF("   P2P TX Power %d", g_lorawan_settings.p2p_tx_power);
 		AT_PRINTF("   P2P BW %s", bandwidths[g_lorawan_settings.p2p_bandwidth]);
 		AT_PRINTF("   P2P SF %d", g_lorawan_settings.p2p_sf);
-		AT_PRINTF("   P2P CR %d", g_lorawan_settings.p2p_cr);
+		AT_PRINTF("   P2P CR %d", g_lorawan_settings.p2p_cr-1);
 		AT_PRINTF("   P2P Preamble length %d", g_lorawan_settings.p2p_preamble_len);
 		AT_PRINTF("   P2P Symbol Timeout %d", g_lorawan_settings.p2p_symbol_timeout);
 	}
@@ -369,7 +369,7 @@ static int at_exec_p2p_bw(char *str)
  */
 static int at_query_p2p_cr(void)
 {
-	snprintf(g_at_query_buf, ATQUERY_SIZE, "%d", g_lorawan_settings.p2p_cr);
+	snprintf(g_at_query_buf, ATQUERY_SIZE, "%d", g_lorawan_settings.p2p_cr-1);
 	return AT_SUCCESS;
 }
 
@@ -387,12 +387,12 @@ static int at_exec_p2p_cr(char *str)
 	}
 	long cr = strtol(str, NULL, 0);
 
-	if ((cr < 1) || (cr > 4))
+	if ((cr < 0) || (cr > 3))
 	{
 		return AT_ERRNO_PARA_VAL;
 	}
 
-	g_lorawan_settings.p2p_cr = cr;
+	g_lorawan_settings.p2p_cr = cr +1;
 	save_settings();
 
 	set_new_config();
@@ -484,7 +484,7 @@ static int at_query_p2p_config(void)
 			 g_lorawan_settings.p2p_frequency,
 			 g_lorawan_settings.p2p_sf,
 			 bandwidths[g_lorawan_settings.p2p_bandwidth],
-			 g_lorawan_settings.p2p_cr,
+			 g_lorawan_settings.p2p_cr-1,
 			 g_lorawan_settings.p2p_preamble_len,
 			 g_lorawan_settings.p2p_tx_power);
 	return AT_SUCCESS;
@@ -561,7 +561,7 @@ static int at_exec_p2p_config(char *str)
 						return AT_ERRNO_PARA_VAL;
 					}
 
-					g_lorawan_settings.p2p_cr = cr;
+					g_lorawan_settings.p2p_cr = cr + 1;
 
 					// Check Preamble length
 					param = strtok(NULL, ":");
