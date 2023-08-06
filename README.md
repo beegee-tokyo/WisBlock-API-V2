@@ -14,7 +14,7 @@ In addition the API offers two options to setup LoRa P2P / LoRaWAN settings with
 - AT Commands => [AT-Command Manual](https://docs.rakwireless.com/RUI3/Serial-Operating-Modes/AT-Command-Manual/https://docs.rakwireless.com/RUI3/Serial-Operating-Modes/AT-Command-Manual/) ↗️
 - WisToolBox ==> [WisToolbox](https://docs.rakwireless.com/Product-Categories/Software-Tools/WisToolBox) ↗️
 
-# _**IMPORTANT:**_
+# ⚠️ _**IMPORTANT:**_
 _**V2 of the library changed the AT command format to be compatible with RUI3 AT commands. Please check the AT command manual for RUI3 for differences.**_
 
 _**V2 release supports only the [RAKwireless WisBlock RAK4631 Core Module](https://docs.rakwireless.com/Product-Categories/WisBlock/RAK4631/Overview)**_ ↗️ 
@@ -29,10 +29,11 @@ _**Support for the RAK11310 and RAK1200 might be added in the future**_
 	* [AT Command format](#at-command-format)
 	* [Extend AT command interface](#extend-at-command-interface)
 	* [Available examples](#available-examples)
+	* [Firmware update over BLE](#firmware-updae-over-ble)
 * [API functions](#api-functions)
 	* [Set the application version](#set-the-application-version)
 	* [Set hardcoded LoRaWAN credentials](#set-hardcoded-lorawan-credentials)
-	* [Reset WisBlock Core module](#reset_wisblock_core-module)
+	* [Reset WisBlock Core module](#reset-wisblock-core-module)
 	* [Wake up loop](#wake-up-loop)
 	* [Print settings to log output](#print-settings-to-log-output)
 	* [Stop application wakeup timer](#stop-application-wakeup-timer)
@@ -67,7 +68,7 @@ _**Support for the RAK11310 and RAK1200 might be added in the future**_
 
 The API is handling everything from **`setup()`**, **`loop()`**, LoRaWAN initialization, LoRaWAN events handling, BLE initialization, BLE events handling to the AT command interface.    
 
-_**REMARK!**_    
+📝 _**REMARK!**_    
 The user application **MUST NOT** have the functions **`setup()`** and **`loop()`**!    
 
 The user application has two initialization functions, one is called at the beginning of **`setup()`**, the other one at the very end. The other functions are event callbacks that are called from **`loop()`**. It is possible to define custom events (like interrupts from a sensor) as well. 
@@ -76,7 +77,7 @@ Sensor reading, actuator control or other application tasks are handled in the *
 
 **`ble_data_handler()`** is called on BLE events (BLE UART RX events for now) from **`loop()`**. It can be used to implement custom communication over BLE UART.
 
-**REMARK**    
+📝 **REMARK!**    
 This function is not required on the RAK11310!    
 
 **`lora_data_handler()`** is called on different LoRaWAN events    
@@ -267,7 +268,8 @@ OK
 
 ## Extend AT command interface
 Starting with WisBlock API V1.1.2 the AT Commands can be extended by user defined AT Commands. This new implementation uses the parser function of the WisBlock API AT command function. In addition, custom AT commands will be listed if the **`AT?`** is used.    
-_**REMARK!**_ 
+
+📝 _**REMARK!**_ 
 In RUI3 custom AT commands are called with _**ATC**_ instead of _**AT**_!     
 
 To extend the AT commands, three steps are required:    
@@ -284,13 +286,13 @@ atcmd_t g_user_at_cmd_list_example[] = {
 
 atcmd_t *g_user_at_cmd_list = g_user_at_cmd_list_example;
 ```
-**REMARK 1**    
+📝 **REMARK 1**    
 The structure for custom AT commands is extended for RUI3 compatibility. Older code written for WisBlock-API V1.x needs to be adjusted to this new structure.        
-**REMARK 2**    
+📝 **REMARK 2**    
 For functions that are not supported by the AT command a **`NULL`** must be put into the array.    
-**REMARK 3**    
+📝 **REMARK 3**    
 The name **`g_user_at_cmd_list`** is fixed and cannot be changed or the custom commands are not detected.    
-**REMARK 4**     
+📝 **REMARK 4**     
 The permissions are given as a string. Valid entries are "R" (read only), "W" (write only), "RW" (read and write)    
 
 ### 2) Definition of the number of custom AT commands
@@ -299,7 +301,7 @@ A variable with the number of custom AT commands must be provided:
 /** Number of user defined AT commands */
 uint8_t g_user_at_cmd_num = sizeof(g_user_at_cmd_list_example) / sizeof(atcmd_t);
 ```
-**REMARK**    
+📝 **REMARK**    
 The name **`g_user_at_cmd_num`** is fixed and cannot be changed or the custom commands are not detected.
 
 ### 3) The functions for query and execute
@@ -401,6 +403,16 @@ _**The WisBlock-API-V2 has been used as well in the following PlatformIO project
 - _**[RAK4631-Kit-2-RAK1910-RAK1904-RAK1906](https://github.com/beegee-tokyo/RAK4631-Kit-2-RAK1910-RAK1904-RAK1906) :arrow_upper_right: LPWAN GNSS tracker application for the [WisBlock Kit 2](https://store.rakwireless.com/collections/kits-bundles/products/wisblock-kit-2-lora-based-gps-tracker-with-solar-panel)**_ :arrow_upper_right:
 - _**[RAK4631-Kit-2-RAK12500-RAK1906](https://github.com/beegee-tokyo/RAK4631-Kit-2-RAK12500-RAK1906) :arrow_upper_right: LPWAN GNSS tracker application using the [RAK12500](https://store.rakwireless.com/products/wisblock-gnss-location-module-rak12500)**_ :arrow_upper_right:
 - _**[WisBlock-Sensor-For-LoRaWAN](https://github.com/beegee-tokyo/WisBlock-Sensor-For-LoRaWAN) :arrow_upper_right: My test application that supports many WisBlock I2C modules. It scans the I2C bus for connected modules and adapts its function and the payload to the found modules.
+
+----
+
+## Firmware update over BLE
+
+When used with the RAK4631, firmware update over BLE is already included in the library. Firmware updates for the RAK4631 can be done by using the Nordic nRF Toolbox (available for Android and iOS) or with the WisBlock Toolbox (my Android application).    
+For the update, copy the created update file (usually called firmware.zip) from the .pio/build/{device} folder, copy it to you phone and use one of the applications to update the firmware.
+
+#### 📝 _INFO_    
+If the firmware update via BLE fails, update the device to the latest bootloader for the RAK4631 with the version V0.4.3. You can find the latest bootloader in the [WisBlock repo](https://github.com/RAKWireless/WisBlock/tree/master/bootloader/RAK4630/Latest)     
 
 ----
 
@@ -745,10 +757,10 @@ To make it easier in data encoders used in LoRaWAN servers and integration data 
 | LPP_CHANNEL_EQ_COLLAPSE  | 47        | 102        | 1 byte   | bool                                              | RAK12027          | presence_47        |
 | Switch Status            | 48        | 102        | 1 byte   | bool                                              | RAK13011          | presence_48        |
 
-### _REMARK_
+### 📝 _REMARK_
 Channel ID's in cursive are extended format and not supported by standard Cayenne LPP data decoders.
 
-### _REMARK_ 
+### 📝 _REMARK_ 
 An full and updated list of used data formats can be found in our [RAKwireless_Standardized_Payload](https://github.com/RAKWireless/RAKwireless_Standardized_Payload) ⤴️.     
 The RAKwireless_Standardized_Payload repo includes as well a matching decoder.
 
@@ -1216,6 +1228,8 @@ AT Command functions: Taylor Lee (taylor.lee@rakwireless.com)
 # Changelog
 [Code releases](CHANGELOG.md)
 
+- 2023-07-20 Add TX failed for LoRa P2P
+  - Add g_rx_fin_result = false; and call TX callback if CAD returns channel activity found
 - 2023-06-23 Fix CR bug
   - CR values are different between SX126x-Arduino and RUI3
 - 2023-05-22 Enhance AT commands

@@ -143,6 +143,7 @@ void on_rx_done(uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr)
 
 	g_last_rssi = rssi;
 	g_last_snr = snr;
+	g_rx_fin_result = true;
 
 	// Copy the data into loop data buffer
 	memcpy(g_rx_lora_data, payload, size);
@@ -260,6 +261,11 @@ void on_cad_done(bool cadResult)
 			API_LOG("LORA", "CAD failed - Restart RX");
 			break;
 		}
+
+		g_rx_fin_result = false;
+
+		// Notify loop task
+		api_wake_loop(LORA_TX_FIN);
 	}
 	else
 	{
