@@ -29,7 +29,7 @@ _**Support for the RAK11310 and RAK1200 might be added in the future**_
 	* [AT Command format](#at-command-format)
 	* [Extend AT command interface](#extend-at-command-interface)
 	* [Available examples](#available-examples)
-	* [Firmware update over BLE](#firmware-updae-over-ble)
+	* [Firmware update over BLE](#firmware-update-over-ble)
 * [API functions](#api-functions)
 	* [Set the application version](#set-the-application-version)
 	* [Set hardcoded LoRaWAN credentials](#set-hardcoded-lorawan-credentials)
@@ -760,7 +760,7 @@ To make it easier in data encoders used in LoRaWAN servers and integration data 
 ### 📝 _REMARK_
 Channel ID's in cursive are extended format and not supported by standard Cayenne LPP data decoders.
 
-### 📝 _REMARK_ 
+### 📝_REMARK_ 
 An full and updated list of used data formats can be found in our [RAKwireless_Standardized_Payload](https://github.com/RAKWireless/RAKwireless_Standardized_Payload) ⤴️.     
 The RAKwireless_Standardized_Payload repo includes as well a matching decoder.
 
