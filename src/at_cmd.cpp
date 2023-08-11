@@ -2164,6 +2164,36 @@ static int at_query_lstmulc(void)
 	return AT_SUCCESS;
 }
 
+/**
+ * @brief ATC+PROD_INFO=? Get current product info
+ *
+ * @return int AT_SUCCESS;
+ */
+static int at_query_info(void)
+{
+	if (g_device_pid.equals("Custom"))
+	{
+		return AT_ERRNO_NOSUPP;
+	}
+
+	uint8_t dev_sn[8] = {0};
+	BoardGetUniqueId(dev_sn);
+	snprintf(g_at_query_buf, ATQUERY_SIZE, "VB:%d.%d.%d:%02X%02X%02X%02X%02X%02X%02X%02X:%s:%02X%02X%02X%02X%02X%02X%02X%02X:C",
+			 g_sw_ver_1, g_sw_ver_2, g_sw_ver_3,
+			 g_lorawan_settings.node_device_eui[0],
+			 g_lorawan_settings.node_device_eui[1],
+			 g_lorawan_settings.node_device_eui[2],
+			 g_lorawan_settings.node_device_eui[3],
+			 g_lorawan_settings.node_device_eui[4],
+			 g_lorawan_settings.node_device_eui[5],
+			 g_lorawan_settings.node_device_eui[6],
+			 g_lorawan_settings.node_device_eui[7],
+			 g_device_pid.c_str(),
+			 dev_sn[7], dev_sn[6], dev_sn[5], dev_sn[4],
+			 dev_sn[3], dev_sn[2], dev_sn[1], dev_sn[0]);
+	return AT_SUCCESS;
+}
+
 static int at_exec_list_all(void);
 
 /**
@@ -2243,6 +2273,7 @@ static atcmd_t g_at_cmd_list[] = {
 	{"+STATUS", "Status, Show LoRaWAN status", at_query_status, NULL, NULL, "R"},
 	{"+SENDINT", "Send interval, Get or Set the automatic send interval", at_query_sendint, at_exec_sendint, NULL, "RW"},
 	{"+PORT", "Get or Set the Port=[1..223]", at_query_port, at_exec_port, NULL, "RW"},
+	{"+PRD_INFO", "Get product info", at_query_info, NULL, NULL, "R"},
 };
 /**
 
@@ -2271,7 +2302,10 @@ static int at_exec_list_all(void)
 
 	for (unsigned int idx = 1; idx < sizeof(g_at_cmd_list) / sizeof(atcmd_t); idx++)
 	{
-		if ((strcmp(g_at_cmd_list[idx].cmd_name, (char *)"+STATUS") == 0) || (strcmp(g_at_cmd_list[idx].cmd_name, (char *)"+SENDINT") == 0) || (strcmp(g_at_cmd_list[idx].cmd_name, (char *)"+PORT") == 0))
+		if ((strcmp(g_at_cmd_list[idx].cmd_name, (char *)"+STATUS") == 0) ||
+			(strcmp(g_at_cmd_list[idx].cmd_name, (char *)"+SENDINT") == 0) ||
+			(strcmp(g_at_cmd_list[idx].cmd_name, (char *)"+PORT") == 0) ||
+			(strcmp(g_at_cmd_list[idx].cmd_name, (char *)"+PRD_INFO") == 0))
 		{
 			AT_PRINTF("ATC%s,%s: %s", g_at_cmd_list[idx].cmd_name, g_at_cmd_list[idx].permission, g_at_cmd_list[idx].cmd_desc);
 		}
@@ -2366,8 +2400,8 @@ static void at_cmd_handle(void)
 					snprintf(atcmd, ATCMD_SIZE, "\nAT%s:\"%s\"\n",
 							 cmd_name, g_at_cmd_list[i].cmd_desc);
 					snprintf(cmd_result, ATCMD_SIZE, "OK");
-					Serial.printf(">>atcmd = %s<<\n", atcmd);
-					Serial.printf(">>cmd_result = %s<<\n", cmd_result);
+					// Serial.printf(">>atcmd = %s<<\n", atcmd);
+					// Serial.printf(">>cmd_result = %s<<\n", cmd_result);
 				}
 			}
 			else
@@ -2519,7 +2553,7 @@ static void at_cmd_handle(void)
 
 							if (ret == 0)
 							{
-								snprintf(atcmd, ATCMD_SIZE, "\nAT%s=%s\n",
+								snprintf(atcmd, ATCMD_SIZE, "\nAT%s=%s",
 										 cmd_name, g_at_query_buf);
 								snprintf(cmd_result, ATCMD_SIZE, "OK");
 							}
@@ -2608,15 +2642,39 @@ static void at_cmd_handle(void)
 
 	if (ret != 0 && ret != AT_CB_PRINT)
 	{
-		snprintf(atcmd, ATCMD_SIZE, "\n%s%x", AT_ERROR, ret);
+		switch (ret)
+		{
+		case AT_ERRNO_NOSUPP:
+			snprintf(atcmd, ATCMD_SIZE, "\nAT_COMMAND_NOT_FOUND");
+			break;
+		case AT_ERRNO_NOALLOW:
+		case AT_ERRNO_EXEC_FAIL:
+		case AT_ERRNO_SYS:
+		default:
+			snprintf(atcmd, ATCMD_SIZE, "\nAT_ERROR");
+			break;
+		case AT_ERRNO_PARA_VAL:
+			snprintf(atcmd, ATCMD_SIZE, "\nAT_PARAM_ERROR");
+			break;
+		case AT_ERRNO_PARA_NUM:
+			snprintf(atcmd, ATCMD_SIZE, "\nAT_TEST_PARAM_OVERFLOW");
+			break;
+		}
+		// snprintf(atcmd, ATCMD_SIZE, "\n%s%x", AT_ERROR, ret);
+		// snprintf(cmd_result, ATCMD_SIZE, "OK");
+	}
+	if (ret == AT_SUCCESS)
+	{
 		snprintf(cmd_result, ATCMD_SIZE, "OK");
 	}
 
 	if (ret != AT_CB_PRINT)
 	{
 		AT_PRINTF(atcmd);
-
-		AT_PRINTF(cmd_result);
+		if (ret == AT_SUCCESS)
+		{
+			AT_PRINTF(cmd_result);
+		}
 	}
 
 	atcmd_index = 0;
@@ -2649,7 +2707,7 @@ void at_serial_input(uint8_t cmd)
 	// Check valid character
 	if ((cmd >= '0' && cmd <= '9') || (cmd >= 'a' && cmd <= 'z') ||
 		(cmd >= 'A' && cmd <= 'Z') || cmd == '?' || cmd == '+' || cmd == ':' ||
-		cmd == '=' || cmd == ' ' || cmd == ',')
+		cmd == '=' || cmd == ' ' || cmd == ',' || cmd == '_')
 	{
 		atcmd[atcmd_index++] = cmd;
 	}

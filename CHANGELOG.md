@@ -4,8 +4,9 @@ Arduino library for RAKWireless WisBlock Core modules that takes all the LoRaWAN
 
 # Release Notes
 
-## not released
+## 2.0.11 Smaller problem fixes
   - Add g_rx_fin_result = false; for LoRa P2P and call TX callback if CAD returns channel activity found
+  - Fix compatibility problem with latest WisToolBox version by changeing AT error return values from +CME... to the new error strings
 
 ## 2.0.10 Enhance AT commands
   - Add option to set device alias

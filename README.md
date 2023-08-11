@@ -550,10 +550,10 @@ g_lorawan_settings.p2p_tx_power = 22;					// TX power 22 dBi
 api_set_credentials();
 ```
 
-_**REMARK 1**_    
+📝  _**REMARK 1**_    
 Hard coded settings must be set in **`void setup_app(void)`**!
 
-_**REMARK 2**_    
+📝  _**REMARK 2**_    
 Keep in mind that parameters that are changed from with this method can be changed over AT command or BLE _**BUT WILL BE RESET AFTER A REBOOT**_!
 
 ----
@@ -561,7 +561,7 @@ Keep in mind that parameters that are changed from with this method can be chang
 ## Send data over BLE UART (only RAK4631 and RAK11200)
 **`api_ble_printf()`** can be used to send data over the BLE UART. **`print`**, **`println`** and **`printf`** is supported.     
 
-**REMARK**    
+📝  **REMARK**    
 This command is not available on the RAK11310!    
 
 ----
@@ -569,7 +569,7 @@ This command is not available on the RAK11310!
 ## Restart BLE advertising (only RAK4631 and RAK11200)
 By default the BLE advertising is only active for 30 seconds after power-up/reset to lower the power consumption. By calling **`void restart_advertising(uint16_t timeout);`** the advertising can be restarted for **`timeout`** seconds.
 
-**REMARK**    
+📝  **REMARK**    
 This command is not available on the RAK11310!    
 
 ----
@@ -1187,7 +1187,7 @@ in the file **`WisBlock-API-V2`**
     0 -> the blue LED will be used to indicate BLE status
     1 -> the blue LED will not used
 
-_**REMARK**_    
+📝 _**REMARK**_    
 RAK11310 has no BLE and the blue LED can be used for other purposes.    
 
 ----
@@ -1228,6 +1228,8 @@ AT Command functions: Taylor Lee (taylor.lee@rakwireless.com)
 # Changelog
 [Code releases](CHANGELOG.md)
 
+- 2023-08-11 Fix compatibility problem with latest WisToolBox version
+  - Change AT error return values from +CME... to the new error strings
 - 2023-07-20 Add TX failed for LoRa P2P
   - Add g_rx_fin_result = false; and call TX callback if CAD returns channel activity found
 - 2023-06-23 Fix CR bug

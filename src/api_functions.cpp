@@ -29,6 +29,8 @@ uint16_t g_sw_ver_3 = SW_VERSION_3; // patch version increase on bugfix, no affe
 uint16_t g_sw_ver_3 = 0; // patch version increase on bugfix, no affect on API
 #endif
 
+String g_device_pid = "Custom";
+
 /** Buffer for device alias (WisToolBox) */
 char g_alias[16] = {0x00};
 

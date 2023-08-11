@@ -421,5 +421,5 @@ enum
 extern uint16_t g_sw_ver_1; // major version increase on API change / not backwards compatible
 extern uint16_t g_sw_ver_2; // minor version increase on API change / backward compatible
 extern uint16_t g_sw_ver_3; // patch version increase on bugfix, no affect on API
-
+extern String g_device_pid; // Product PID (if applicable)
 #endif // WISBLOCK_API_H
