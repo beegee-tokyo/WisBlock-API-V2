@@ -191,7 +191,7 @@ void at_settings(void)
 		AT_PRINTF("   P2P TX Power %d", g_lorawan_settings.p2p_tx_power);
 		AT_PRINTF("   P2P BW %s", bandwidths[g_lorawan_settings.p2p_bandwidth]);
 		AT_PRINTF("   P2P SF %d", g_lorawan_settings.p2p_sf);
-		AT_PRINTF("   P2P CR %d", g_lorawan_settings.p2p_cr-1);
+		AT_PRINTF("   P2P CR %d", g_lorawan_settings.p2p_cr - 1);
 		AT_PRINTF("   P2P Preamble length %d", g_lorawan_settings.p2p_preamble_len);
 		AT_PRINTF("   P2P Symbol Timeout %d", g_lorawan_settings.p2p_symbol_timeout);
 	}
@@ -369,7 +369,7 @@ static int at_exec_p2p_bw(char *str)
  */
 static int at_query_p2p_cr(void)
 {
-	snprintf(g_at_query_buf, ATQUERY_SIZE, "%d", g_lorawan_settings.p2p_cr-1);
+	snprintf(g_at_query_buf, ATQUERY_SIZE, "%d", g_lorawan_settings.p2p_cr - 1);
 	return AT_SUCCESS;
 }
 
@@ -392,7 +392,7 @@ static int at_exec_p2p_cr(char *str)
 		return AT_ERRNO_PARA_VAL;
 	}
 
-	g_lorawan_settings.p2p_cr = cr +1;
+	g_lorawan_settings.p2p_cr = cr + 1;
 	save_settings();
 
 	set_new_config();
@@ -484,7 +484,7 @@ static int at_query_p2p_config(void)
 			 g_lorawan_settings.p2p_frequency,
 			 g_lorawan_settings.p2p_sf,
 			 bandwidths[g_lorawan_settings.p2p_bandwidth],
-			 g_lorawan_settings.p2p_cr-1,
+			 g_lorawan_settings.p2p_cr - 1,
 			 g_lorawan_settings.p2p_preamble_len,
 			 g_lorawan_settings.p2p_tx_power);
 	return AT_SUCCESS;
@@ -1719,7 +1719,14 @@ static int at_query_snr(void)
  */
 static int at_query_version(void)
 {
-	snprintf(g_at_query_buf, ATQUERY_SIZE, "WisBlock API %d.%d.%d", WISBLOCK_API_VER, WISBLOCK_API_VER2, WISBLOCK_API_VER3);
+	if (g_custom_fw_ver.equals("unset"))
+	{
+		snprintf(g_at_query_buf, ATQUERY_SIZE, "WisBlock API %d.%d.%d", WISBLOCK_API_VER, WISBLOCK_API_VER2, WISBLOCK_API_VER3);
+	}
+	else
+	{
+		snprintf(g_at_query_buf, ATQUERY_SIZE, "%s", g_custom_fw_ver.c_str());
+	}
 	return AT_SUCCESS;
 }
 
@@ -2358,11 +2365,13 @@ static void at_cmd_handle(void)
 
 	rxcmd_index = tmp;
 
+	bool internal_custom = false;
+
 	// Check user defined AT command from list
 	if (rxcmd[0] == 'C')
 	{
+		internal_custom = true;
 		// RUI3 custom AT command
-		// Serial.println("User CMD, remove C");
 		uint8_t idx = 0;
 		for (idx = 0; idx < strlen(rxcmd); idx++)
 		{
@@ -2397,8 +2406,8 @@ static void at_cmd_handle(void)
 				}
 				else
 				{
-					snprintf(atcmd, ATCMD_SIZE, "\nAT%s:\"%s\"\n",
-							 cmd_name, g_at_cmd_list[i].cmd_desc);
+					snprintf(atcmd, ATCMD_SIZE, "\nAT%s%s:\"%s\"\n",
+							 internal_custom ? "C" : "", cmd_name, g_at_cmd_list[i].cmd_desc);
 					snprintf(cmd_result, ATCMD_SIZE, "OK");
 					// Serial.printf(">>atcmd = %s<<\n", atcmd);
 					// Serial.printf(">>cmd_result = %s<<\n", cmd_result);
@@ -2420,8 +2429,8 @@ static void at_cmd_handle(void)
 
 				if (ret == 0)
 				{
-					snprintf(atcmd, ATCMD_SIZE, "\nAT%s=%s\n",
-							 cmd_name, g_at_query_buf);
+					snprintf(atcmd, ATCMD_SIZE, "\nAT%s%s=%s\n",
+							 internal_custom ? "C" : "", cmd_name, g_at_query_buf);
 					snprintf(cmd_result, ATCMD_SIZE, "OK");
 				}
 			}
@@ -2532,7 +2541,7 @@ static void at_cmd_handle(void)
 							}
 							else
 							{
-								snprintf(atcmd, ATCMD_SIZE, "\nAT%s:\"%s\"\n",
+								snprintf(atcmd, ATCMD_SIZE, "\nATC%s:\"%s\"\n",
 										 cmd_name, g_user_at_cmd_list[j].cmd_desc);
 								snprintf(cmd_result, ATCMD_SIZE, " ");
 							}
@@ -2553,7 +2562,7 @@ static void at_cmd_handle(void)
 
 							if (ret == 0)
 							{
-								snprintf(atcmd, ATCMD_SIZE, "\nAT%s=%s",
+								snprintf(atcmd, ATCMD_SIZE, "\nATC%s=%s",
 										 cmd_name, g_at_query_buf);
 								snprintf(cmd_result, ATCMD_SIZE, "OK");
 							}

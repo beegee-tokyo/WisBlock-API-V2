@@ -30,6 +30,7 @@ uint16_t g_sw_ver_3 = 0; // patch version increase on bugfix, no affect on API
 #endif
 
 String g_device_pid = "Custom";
+String g_custom_fw_ver = "unset";
 
 /** Buffer for device alias (WisToolBox) */
 char g_alias[16] = {0x00};

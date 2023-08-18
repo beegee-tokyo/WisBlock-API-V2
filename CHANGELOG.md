@@ -4,6 +4,9 @@ Arduino library for RAKWireless WisBlock Core modules that takes all the LoRaWAN
 
 # Release Notes
 
+## NOT_RELEASED YET Fix more compatibility problems with latest WisToolBox version
+  - Give correct ATC+.... return instead of only AT+... for custom AT commands
+
 ## 2.0.11 Smaller problem fixes
   - Add g_rx_fin_result = false; for LoRa P2P and call TX callback if CAD returns channel activity found
   - Fix compatibility problem with latest WisToolBox version by changeing AT error return values from +CME... to the new error strings
@@ -14,6 +17,7 @@ Arduino library for RAKWireless WisBlock Core modules that takes all the LoRaWAN
 ## 2.0.9 Enhancements
   - Enhance AT+BOOT to work with RP2040
   - Add option for custom boards (no LED's no BLE advertising)
+  
 ## 2.0.8 Add AT+BOOT command to force DFU/UF2 bootloader mode
 
 ## 2.0.7 Add new CayenneLPP type for device ID (for Hummingbird PoC)

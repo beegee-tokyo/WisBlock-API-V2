@@ -1228,6 +1228,8 @@ AT Command functions: Taylor Lee (taylor.lee@rakwireless.com)
 # Changelog
 [Code releases](CHANGELOG.md)
 
+- 2023-08-18 Fix more compatibility problems with latest WisToolBox version
+  - Give correct ATC+.... return instead of only AT+... for custom AT commands
 - 2023-08-11 Fix compatibility problem with latest WisToolBox version
   - Change AT error return values from +CME... to the new error strings
 - 2023-07-20 Add TX failed for LoRa P2P
