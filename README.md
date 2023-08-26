@@ -1228,6 +1228,9 @@ AT Command functions: Taylor Lee (taylor.lee@rakwireless.com)
 # Changelog
 [Code releases](CHANGELOG.md)
 
+- 2023-08-26 New features
+  - Add AT command for force OTA DFU mode on RAK4631
+  - Add re-initialize function for LoRaWAN (fix problem with confirmed msg NAK)
 - 2023-08-18 Fix more compatibility problems with latest WisToolBox version
   - Give correct ATC+.... return instead of only AT+... for custom AT commands
 - 2023-08-11 Fix compatibility problem with latest WisToolBox version

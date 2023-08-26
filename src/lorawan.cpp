@@ -192,6 +192,89 @@ int8_t init_lorawan(void)
 	return 0;
 }
 
+/**
+ * @brief Re-init LoRaWAN stack
+ *     Workaround for bug after NAK
+ * @return int8_t result
+ *  0 => OK
+ * -2 => LoRaWan MAC initialization failure
+ * -3 => Subband selection failure
+ */
+int8_t re_init_lorawan(void)
+{
+	// Setup the EUIs and Keys
+	lmh_setDevEui(g_lorawan_settings.node_device_eui);
+	lmh_setAppEui(g_lorawan_settings.node_app_eui);
+	lmh_setAppKey(g_lorawan_settings.node_app_key);
+	lmh_setNwkSKey(g_lorawan_settings.node_nws_key);
+	lmh_setAppSKey(g_lorawan_settings.node_apps_key);
+	lmh_setDevAddr(g_lorawan_settings.node_dev_addr);
+
+	// Setup the LoRaWan init structure
+	lora_param_init.adr_enable = g_lorawan_settings.adr_enabled;
+	lora_param_init.tx_data_rate = g_lorawan_settings.data_rate;
+	lora_param_init.enable_public_network = g_lorawan_settings.public_network;
+	lora_param_init.nb_trials = g_lorawan_settings.join_trials;
+	lora_param_init.tx_power = g_lorawan_settings.tx_power;
+	lora_param_init.duty_cycle = g_lorawan_settings.duty_cycle_enabled;
+
+	API_LOG("LORA", "Initialize LoRaWAN for region %s", region_names[g_lorawan_settings.lora_region]);
+	// Initialize LoRaWan
+	if (lmh_init(&lora_callbacks, lora_param_init, g_lorawan_settings.otaa_enabled, (eDeviceClass)g_lorawan_settings.lora_class, (LoRaMacRegion_t)g_lorawan_settings.lora_region) != 0)
+	{
+		API_LOG("LORA", "Failed to initialize LoRaWAN");
+		return -2;
+	}
+
+	// For some regions we might need to define the sub band the gateway is listening to
+	// This must be called AFTER lmh_init()
+
+	// Additional check if the subband from the settings is valid
+	switch ((LoRaMacRegion_t)g_lorawan_settings.lora_region)
+	{
+	case LORAMAC_REGION_AS923:
+	case LORAMAC_REGION_AS923_2:
+	case LORAMAC_REGION_AS923_3:
+	case LORAMAC_REGION_AS923_4:
+	case LORAMAC_REGION_RU864:
+		if (g_lorawan_settings.subband_channels > 1)
+		{
+			g_lorawan_settings.subband_channels = 1;
+		}
+		break;
+	case LORAMAC_REGION_AU915:
+	case LORAMAC_REGION_US915:
+		if (g_lorawan_settings.subband_channels > 9)
+		{
+			g_lorawan_settings.subband_channels = 1;
+		}
+		break;
+	case LORAMAC_REGION_CN470:
+		if (g_lorawan_settings.subband_channels > 12)
+		{
+			g_lorawan_settings.subband_channels = 1;
+		}
+		break;
+	case LORAMAC_REGION_CN779:
+	case LORAMAC_REGION_EU433:
+	case LORAMAC_REGION_IN865:
+	case LORAMAC_REGION_EU868:
+	case LORAMAC_REGION_KR920:
+		if (g_lorawan_settings.subband_channels > 2)
+		{
+			g_lorawan_settings.subband_channels = 1;
+		}
+		break;
+	}
+
+	if (!lmh_setSubBandChannels(g_lorawan_settings.subband_channels))
+	{
+		API_LOG("LORA", "lmh_setSubBandChannels failed. Wrong sub band requested?");
+		return -3;
+	}
+	return 0;
+}
+
 /**************************************************************/
 /* LoRaWAN callback functions                                            */
 /**************************************************************/

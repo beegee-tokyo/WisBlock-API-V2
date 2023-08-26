@@ -1768,11 +1768,11 @@ static int at_exec_restore(void)
 }
 
 /**
- * @brief AT+BOOT force into DFU/UF2 mode
+ * @brief AT+BOOT force into UF2/Bootloader mode
  *
  * @return int AT_SUCCESS
  */
-static int at_exec_dfu(void)
+static int at_exec_boot(void)
 {
 #if defined NRF52_SERIES
 	NRF_POWER->GPREGRET = 0x57; // 0xA8 OTA, 0x4e Serial, 0x57 UF2
@@ -1784,6 +1784,25 @@ static int at_exec_dfu(void)
 #endif
 #ifdef ARDUINO_ARCH_RP2040
 	_ontouch1200bps_();
+#endif
+}
+
+/**
+ * @brief AT+DFU force into DFU mode (only on RAK4631)
+ *
+ * @return int AT_SUCCESS
+ */
+static int at_exec_dfu(void)
+{
+#if defined NRF52_SERIES
+	NRF_POWER->GPREGRET = 0xA8; // 0xA8 OTA, 0x4e Serial, 0x57 UF2
+	NVIC_SystemReset();			// or sd_nvic_SystemReset();
+#endif
+#if defined ESP32
+	// No support for OTA DFU
+#endif
+#ifdef ARDUINO_ARCH_RP2040
+	// No support for OTA DFU
 #endif
 }
 
@@ -2250,7 +2269,7 @@ static atcmd_t g_at_cmd_list[] = {
 	{"+PSEND", "P2P send data", NULL, at_exec_p2p_send, NULL, "W"},
 	{"+PRECV", "P2P receive mode", at_query_p2p_receive, at_exec_p2p_receive, NULL, "RW"},
 	// WisToolBox compatibility
-	{"+BOOT", "Force bootloader mode", NULL, NULL, at_exec_dfu, "R"},
+	{"+BOOT", "Force bootloader mode", NULL, NULL, at_exec_boot, "R"},
 	{"+BUILDTIME", "Get Build time", at_query_build_time, NULL, NULL, "R"},
 	{"+CLIVER", "Get the version of the AT command", at_query_cli, NULL, NULL, "R"},
 	{"+APIVER", "Get the version of the API", at_query_api, NULL, NULL, "R"},
@@ -2277,6 +2296,7 @@ static atcmd_t g_at_cmd_list[] = {
 	{"+LINKCHECK", "Get network link status", at_query_link, NULL, NULL, "R"},
 	{"+LSTMULC", "Get multicast status", at_query_lstmulc, NULL, NULL, "R"},
 	// Custom AT commands
+	{"+DFU", "Force OTA DFU mode", NULL, NULL, at_exec_dfu, "R"},
 	{"+STATUS", "Status, Show LoRaWAN status", at_query_status, NULL, NULL, "R"},
 	{"+SENDINT", "Send interval, Get or Set the automatic send interval", at_query_sendint, at_exec_sendint, NULL, "RW"},
 	{"+PORT", "Get or Set the Port=[1..223]", at_query_port, at_exec_port, NULL, "RW"},
@@ -2716,7 +2736,7 @@ void at_serial_input(uint8_t cmd)
 	// Check valid character
 	if ((cmd >= '0' && cmd <= '9') || (cmd >= 'a' && cmd <= 'z') ||
 		(cmd >= 'A' && cmd <= 'Z') || cmd == '?' || cmd == '+' || cmd == ':' ||
-		cmd == '=' || cmd == ' ' || cmd == ',' || cmd == '_')
+		cmd == '=' || cmd == ' ' || cmd == ',' || cmd == '.' || cmd == '_')
 	{
 		atcmd[atcmd_index++] = cmd;
 	}
