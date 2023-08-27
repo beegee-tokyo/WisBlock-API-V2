@@ -1268,17 +1268,27 @@ static int at_query_join(void)
  */
 static int at_exec_join(char *str)
 {
-	uint8_t bJoin;
+	uint8_t bJoin = 3;
 	uint8_t autoJoin;
 	uint8_t nbtrials;
 	char *param;
+	bool has_autojoin = false;
+	bool has_nbtrials = false;
 
 	param = strtok(str, ":");
 
 	/* check start or stop join parameter */
-	bJoin = strtol(param, NULL, 0);
+	if (param == NULL)
+	{
+		bJoin = str[0] == '0' ? 0 : 1;
+	}
+	else
+	{
+		bJoin = strtol(param, NULL, 0);
+	}
 	if (bJoin != 1 && bJoin != 0)
 	{
+		API_LOG("AT", "bJoin = %d", bJoin);
 		return AT_ERRNO_PARA_VAL;
 	}
 
@@ -1289,40 +1299,10 @@ static int at_exec_join(char *str)
 		autoJoin = strtol(param, NULL, 0);
 		if (autoJoin != 1 && autoJoin != 0)
 		{
+			API_LOG("AT", "autoJoin = %d", autoJoin);
 			return AT_ERRNO_PARA_VAL;
 		}
-		g_lorawan_settings.auto_join = (autoJoin == 1 ? true : false);
-
-		if (!g_lorawan_settings.lorawan_enable)
-		{
-			if (bJoin == 0)
-			{
-				if (!g_lorawan_initialized)
-				{
-					init_lora();
-				}
-				if (!g_lorawan_settings.auto_join)
-				{
-					Radio.Sleep();
-				}
-			}
-
-			if (bJoin == 1)
-			{
-				if (!g_lorawan_initialized)
-				{
-					init_lora();
-				}
-				else
-				{
-					Radio.Rx(0);
-				}
-			}
-
-			save_settings();
-			return AT_SUCCESS;
-		}
-
+		has_autojoin = true;
 		param = strtok(NULL, ":");
 		if (param != NULL)
 		{
@@ -1337,38 +1317,91 @@ static int at_exec_join(char *str)
 				{
 					return AT_ERRNO_PARA_VAL;
 				}
-				g_lorawan_settings.join_trials = nbtrials;
-				lmh_setConfRetries(nbtrials);
 			}
+			has_nbtrials = true;
 		}
-		save_settings();
-
-		if ((bJoin == 1) && !g_lorawan_initialized) // ==0 stop join, not support, yet
+	}
+	bool need_save = false;
+	if (has_nbtrials)
+	{
+		if (g_lorawan_settings.join_trials != nbtrials)
 		{
-			// Manual join only works if LoRaWAN was not initialized yet.
-			// If LoRaWAN was already initialized, a restart is required
-			init_lorawan();
-			return AT_SUCCESS;
-		}
-
-		if ((bJoin == 1) && g_lorawan_initialized && (lmh_join_status_get() != LMH_SET))
-		{
-			// If if not yet joined, start join
-			delay(100);
-			lmh_join();
-			return AT_SUCCESS;
-		}
-
-		if ((bJoin == 1) && g_lorawan_settings.auto_join)
-		{
-			// If auto join is set, restart the device to start join process
-			delay(100);
-			api_reset();
-			return AT_SUCCESS;
+			need_save = true;
+			g_lorawan_settings.join_trials = nbtrials;
+			lmh_setConfRetries(nbtrials);
 		}
 	}
 
-	return AT_ERRNO_PARA_VAL;
+	if (has_autojoin)
+	{
+		if (g_lorawan_settings.auto_join != autoJoin)
+		{
+			need_save = true;
+			g_lorawan_settings.auto_join = autoJoin;
+		}
+	}
+
+	if (g_lorawan_settings.lorawan_enable)
+	{
+		bool started_join = false;
+		// If join is 0, mark as not joined and put radio into sleep
+		if (bJoin == 0)
+		{
+			if (!g_lorawan_settings.auto_join)
+			{
+				if (!g_lorawan_initialized)
+				{
+					init_lora();
+				}
+				g_lpwan_has_joined = false;
+				Radio.Sleep();
+			}
+		}
+		else // bJoin == 1
+		{
+			if (!g_lpwan_has_joined)
+			{
+				if (!g_lorawan_initialized)
+				{
+					init_lorawan();
+				}
+			}
+			else
+			{
+				// Nothing to do, already joined
+			}
+			started_join = true;
+		}
+
+		if (g_lorawan_settings.auto_join)
+		{
+			if (!started_join)
+			{
+				if (!g_lpwan_has_joined)
+				{
+					if (!g_lorawan_initialized)
+					{
+						init_lorawan();
+					}
+					else
+					{
+						// Start Join process
+						lmh_join();
+					}
+				}
+				else
+				{
+					// Nothing to do, already joined
+				}
+			}
+		}
+	}
+
+	if (need_save)
+	{
+		save_settings();
+	}
+	return AT_SUCCESS;
 }
 
 /**

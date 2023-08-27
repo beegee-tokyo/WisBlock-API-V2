@@ -4,7 +4,7 @@ Arduino library for RAKWireless WisBlock Core modules that takes all the LoRaWAN
 
 # Release Notes
 
-## NOT_RELEASED YET New features & Fix more compatibility problems with latest WisToolBox version
+## 2.0.12  New features & Fix more compatibility problems with latest WisToolBox version
   - Give correct ATC+.... return instead of only AT+... for custom AT commands
   - Add AT command for force OTA DFU mode on RAK4631
   - Add re-initialize function for LoRaWAN (fix problem with confirmed msg NAK)
