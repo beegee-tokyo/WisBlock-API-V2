@@ -639,7 +639,7 @@ static int at_exec_p2p_send(char *str)
  * @brief Set P2P RX mode
  * 0 => TX mode, RX disabled
  * 1 ... 65533 => Enable RX for xxxx milliseconds
- * 65534 => Enable continous RX (restarts after TX)
+ * 65534 => Enable continuous RX (restarts after TX)
  * 65535 => Enable RX until a packet was received, no timeout
  * @return int AT_SUCCESS if no error, otherwise AT_ERRNO_NOALLOW, AT_ERRNO_PARA_VAL, AT_ERRNO_PARA_NUM
  */
@@ -669,10 +669,10 @@ static int at_exec_p2p_receive(char *str)
 		}
 		else if (rx_time == 65534)
 		{
-			// RX continous
+			// RX continuous
 			g_lora_p2p_rx_mode = RX_MODE_RX;
 			g_lora_p2p_rx_time = 0;
-			// Put Radio into continous RX mode
+			// Put Radio into continuous RX mode
 			Radio.Rx(0);
 			API_LOG("AT", "Set RX_MODE_RX");
 		}
@@ -681,7 +681,7 @@ static int at_exec_p2p_receive(char *str)
 			// RX until packet received
 			g_lora_p2p_rx_mode = RX_MODE_RX_WAIT;
 			g_lora_p2p_rx_time = 0;
-			// Put Radio into continous RX mode
+			// Put Radio into continuous RX mode
 			Radio.Rx(0);
 			API_LOG("AT", "Set RX_MODE_RX_WAIT");
 		}
@@ -690,7 +690,7 @@ static int at_exec_p2p_receive(char *str)
 			// RX for specific time
 			g_lora_p2p_rx_mode = RX_MODE_RX_TIMED;
 			g_lora_p2p_rx_time = rx_time;
-			// Put Radio into continous RX mode
+			// Put Radio into continuous RX mode
 			Radio.Rx(rx_time);
 			API_LOG("AT", "Set RX_MODE_RX_TIMED");
 		}
@@ -2634,6 +2634,8 @@ static void at_cmd_handle(void)
 							ret = g_user_at_cmd_list[j].exec_cmd(rxcmd + strlen(cmd_name) + 1);
 							if (ret == 0)
 							{
+								snprintf(atcmd, ATCMD_SIZE, "\nATC%s=%s",
+										 cmd_name, g_at_query_buf);
 								snprintf(atcmd, ATCMD_SIZE, "\nOK");
 								snprintf(cmd_result, ATCMD_SIZE, " ");
 							}

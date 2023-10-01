@@ -91,7 +91,7 @@ uint32_t otaaDevAddr = 0;
  * -2 => LoRaWan MAC initialization failure
  * -3 => Subband selection failure
  */
-int8_t init_lorawan(void)
+int8_t init_lorawan(bool region_change)
 {
 #ifdef ESP32
 	pinMode(WB_IO2, OUTPUT);
@@ -124,7 +124,7 @@ int8_t init_lorawan(void)
 
 	API_LOG("LORA", "Initialize LoRaWAN for region %s", region_names[g_lorawan_settings.lora_region]);
 	// Initialize LoRaWan
-	if (lmh_init(&lora_callbacks, lora_param_init, g_lorawan_settings.otaa_enabled, (eDeviceClass)g_lorawan_settings.lora_class, (LoRaMacRegion_t)g_lorawan_settings.lora_region) != 0)
+	if (lmh_init(&lora_callbacks, lora_param_init, g_lorawan_settings.otaa_enabled, (eDeviceClass)g_lorawan_settings.lora_class, (LoRaMacRegion_t)g_lorawan_settings.lora_region, region_change) != 0)
 	{
 		API_LOG("LORA", "Failed to initialize LoRaWAN");
 		return -2;

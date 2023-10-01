@@ -1228,6 +1228,9 @@ AT Command functions: Taylor Lee (taylor.lee@rakwireless.com)
 # Changelog
 [Code releases](CHANGELOG.md)
 
+- 2023-09-01 New feature/bug-fix
+  - Fix missing return value for ATC commands
+  - Add option to re-init LoRaWAN stack
 - 2023-08-26 New features
   - Add AT command for force OTA DFU mode on RAK4631
   - Add re-initialize function for LoRaWAN (fix problem with confirmed msg NAK)
