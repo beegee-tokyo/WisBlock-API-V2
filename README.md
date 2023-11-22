@@ -1228,6 +1228,8 @@ AT Command functions: Taylor Lee (taylor.lee@rakwireless.com)
 # Changelog
 [Code releases](CHANGELOG.md)
 
+- 2023-11-22 Fix AT+PRECV command
+  - Set RX_CONTINOUS depending on receive mode and re-initialize the LoRa transceiver 
 - 2023-09-01 New feature/bug-fix
   - Fix missing return value for ATC commands
   - Add option to re-init LoRaWAN stack

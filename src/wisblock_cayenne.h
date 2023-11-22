@@ -51,7 +51,10 @@
 #define LPP_CHANNEL_PRESS_2 8		   // RAK1906
 #define LPP_CHANNEL_GAS_2 9			   // RAK1906
 #define LPP_CHANNEL_GPS 10			   // RAK1910/RAK12500
-#define LPP_CHANNEL_SOIL_TEMP 11	   // RAK12035
+/// \todo double used channel !!!!!!!!!!!!!!!!!!!!!!
+#define LPP_CHANNEL_SOIL_TEMP 11 // RAK12035
+#define LPP_CHANNEL_GPS_TOWER 11 // RAK13102
+
 #define LPP_CHANNEL_SOIL_HUMID 12	   // RAK12035
 #define LPP_CHANNEL_SOIL_HUMID_RAW 13  // RAK12035
 #define LPP_CHANNEL_SOIL_VALID 14	   // RAK12035
@@ -101,6 +104,10 @@
 #define LPP_SH_PH_L 58				   // SensorHub RK500-02
 #define LPP_SH_PYRANO 59			   // SensorHub RK200-03
 #define LPP_SH_HUMID_PREC 60		   // SensorHub RK520-02
+#define LPP_CHANNEL_WLEVEL 61		   // RAK12059
+#define LPP_CHANNEL_WL_LOW 62		   // RAK12059
+#define LPP_CHANNEL_WL_HIGH 63		   // RAK12059
+
 class WisCayenne : public CayenneLPP
 {
 public:

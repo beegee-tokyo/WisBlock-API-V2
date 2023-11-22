@@ -4,6 +4,9 @@ Arduino library for RAKWireless WisBlock Core modules that takes all the LoRaWAN
 
 # Release Notes
 
+## 2.0.14 Fix AT+PRECV command
+  - Set RX_CONTINOUS depending on receive mode and re-initialize the LoRa transceiver 
+  
 ## 2.0.13 New feature/bug-fix
   - Fix missing return value for ATC commands
   - Add option to re-init LoRaWAN stack

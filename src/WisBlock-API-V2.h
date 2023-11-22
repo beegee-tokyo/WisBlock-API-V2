@@ -256,6 +256,7 @@ enum P2P_RX_MODE
 };
 extern uint8_t g_lora_p2p_rx_mode;
 extern uint32_t g_lora_p2p_rx_time;
+extern bool g_rx_continuous;
 
 #define LORAWAN_COMPAT_MARKER 0x57
 struct s_loracompat_settings

@@ -34,6 +34,8 @@ uint8_t wtb_regions[] = {8, 6, 1, 12, 0, 4, 7, 3, 5, 9, 10, 11, 2};
 /** Region map between API and WisToolBox*/
 uint8_t api_regions[] = {4, 2, 12, 7, 5, 8, 1, 6, 0, 9, 10, 11, 3};
 
+bool g_rx_continuous = true;
+
 /**
  * @brief Set the device to new settings
  *
@@ -49,8 +51,9 @@ void set_new_config(void)
 	Radio.SetRxConfig(MODEM_LORA, g_lorawan_settings.p2p_bandwidth, g_lorawan_settings.p2p_sf,
 					  g_lorawan_settings.p2p_cr, 0, g_lorawan_settings.p2p_preamble_len,
 					  g_lorawan_settings.p2p_symbol_timeout, false,
-					  0, true, 0, 0, false, true);
-	Radio.Rx(0);
+					  0, true, 0, 0, false, g_rx_continuous);
+	
+	// Radio.Rx(0);
 }
 
 /**
@@ -663,6 +666,8 @@ static int at_exec_p2p_receive(char *str)
 			// TX only mode
 			g_lora_p2p_rx_mode = RX_MODE_NONE;
 			g_lora_p2p_rx_time = 0;
+			g_rx_continuous = false;
+			set_new_config();
 			// Put Radio into sleep mode (stops receiving)
 			Radio.Sleep();
 			API_LOG("AT", "Set RX_MODE_NONE");
@@ -672,6 +677,8 @@ static int at_exec_p2p_receive(char *str)
 			// RX continuous
 			g_lora_p2p_rx_mode = RX_MODE_RX;
 			g_lora_p2p_rx_time = 0;
+			g_rx_continuous = true;
+			set_new_config();
 			// Put Radio into continuous RX mode
 			Radio.Rx(0);
 			API_LOG("AT", "Set RX_MODE_RX");
@@ -681,6 +688,8 @@ static int at_exec_p2p_receive(char *str)
 			// RX until packet received
 			g_lora_p2p_rx_mode = RX_MODE_RX_WAIT;
 			g_lora_p2p_rx_time = 0;
+			g_rx_continuous = false;
+			set_new_config();
 			// Put Radio into continuous RX mode
 			Radio.Rx(0);
 			API_LOG("AT", "Set RX_MODE_RX_WAIT");
@@ -690,6 +699,8 @@ static int at_exec_p2p_receive(char *str)
 			// RX for specific time
 			g_lora_p2p_rx_mode = RX_MODE_RX_TIMED;
 			g_lora_p2p_rx_time = rx_time;
+			g_rx_continuous = false;
+			set_new_config();
 			// Put Radio into continuous RX mode
 			Radio.Rx(rx_time);
 			API_LOG("AT", "Set RX_MODE_RX_TIMED");
