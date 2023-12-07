@@ -152,7 +152,7 @@ class WiFiCallBackHandler : public BLECharacteristicCallbacks
 
 		/** Json object for incoming data */
 		auto json_error = deserializeJson(json_buffer, (char *)&rx_value[0]);
-		if (json_error == 0)
+		if (json_error == DeserializationError::Ok)
 		{
 			if (json_buffer.containsKey("ssidPrim") &&
 				json_buffer.containsKey("pwPrim") &&

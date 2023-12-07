@@ -4,6 +4,9 @@ Arduino library for RAKWireless WisBlock Core modules that takes all the LoRaWAN
 
 # Release Notes
 
+## 2.0.15 Fix ESP32
+  - Make ESP32 work with WisBlock-API-V2
+
 ## 2.0.14 Fix AT+PRECV command
   - Set RX_CONTINOUS depending on receive mode and re-initialize the LoRa transceiver 
   

@@ -71,6 +71,7 @@ using namespace std::chrono;
 #endif
 
 #ifdef ESP32
+#include <WiFi.h>
 #include <Preferences.h>
 #include <nvs.h>
 #include <nvs_flash.h>

@@ -28,6 +28,7 @@ extern uint8_t g_last_fport;
 #ifdef ESP32
 #define AT_PRINTF(...)                                                  \
 	Serial.printf(__VA_ARGS__);                                         \
+	Serial.printf("\n");                                                \
 	if (g_ble_uart_is_connected)                                        \
 	{                                                                   \
 		char buff[255];                                                 \
