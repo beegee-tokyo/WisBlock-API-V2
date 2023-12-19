@@ -38,7 +38,14 @@ extern uint8_t g_last_fport;
 		delay(50);                                                      \
 	}
 #endif
-#if defined ARDUINO_ARCH_RP2040
+
+#if defined ARDUINO_RAKWIRELESS_RAK11300
+#define AT_PRINTF(...)          \
+	Serial.printf(__VA_ARGS__); \
+	Serial.printf("\r\n");
+#endif
+
+#if defined ARDUINO_ARCH_RP2040 && not defined ARDUINO_RAKWIRELESS_RAK11300
 #define AT_PRINTF(...) \
 	Serial.printf(__VA_ARGS__);
 #endif

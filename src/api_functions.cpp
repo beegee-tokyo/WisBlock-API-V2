@@ -90,7 +90,10 @@ void api_reset(void)
 #ifdef NRF52_SERIES
 	sd_nvic_SystemReset();
 #endif
-#ifdef ARDUINO_ARCH_RP2040
+#ifdef ARDUINO_RAKWIRELESS_RAK11300
+	rp2040.reboot();
+#endif
+#if defined ARDUINO_ARCH_RP2040 && not defined ARDUINO_RAKWIRELESS_RAK11300
 	NVIC_SystemReset();
 #endif
 #ifdef ESP32
@@ -106,11 +109,11 @@ void api_reset(void)
  */
 void api_wait_wake(void)
 {
-#if defined NRF52_SERIES || defined ESP32
+#if defined NRF52_SERIES || defined ESP32 || defined ARDUINO_RAKWIRELESS_RAK11300
 	// Wait until semaphore is released (FreeRTOS)
 	xSemaphoreTake(g_task_sem, portMAX_DELAY);
 #endif
-#ifdef ARDUINO_ARCH_RP2040
+#if defined ARDUINO_ARCH_RP2040 && not defined ARDUINO_RAKWIRELESS_RAK11300
 	bool got_signal = false;
 	while (!got_signal)
 	{
@@ -134,14 +137,14 @@ void api_wake_loop(uint16_t reason)
 	g_task_event_type |= reason;
 	API_LOG("API", "Waking up loop task");
 
-#if defined NRF52_SERIES || defined ESP32
+#if defined NRF52_SERIES || defined ESP32 || defined ARDUINO_RAKWIRELESS_RAK11300
 	if (g_task_sem != NULL)
 	{
 		// Wake up task to send initial packet
 		xSemaphoreGive(g_task_sem);
 	}
 #endif
-#ifdef ARDUINO_ARCH_RP2040
+#if defined ARDUINO_ARCH_RP2040 && not defined ARDUINO_RAKWIRELESS_RAK11300
 	if (loop_thread != NULL)
 	{
 		osSignalSet(loop_thread, SIGNAL_WAKE);
@@ -163,7 +166,7 @@ uint32_t api_init_lora(void)
 	return lora_rak4630_init();
 #endif
 #endif
-#ifdef ARDUINO_ARCH_RP2040
+#if defined ARDUINO_ARCH_RP2040 || defined ARDUINO_RAKWIRELESS_RAK11300
 	return lora_rak11300_init();
 #endif
 #ifdef ESP32
@@ -180,9 +183,10 @@ void api_timer_init(void)
 #if defined NRF52_SERIES
 	g_task_wakeup_timer = xTimerCreate(NULL, mypdMS_TO_TICKS(g_lorawan_settings.send_repeat_time), true, NULL, periodic_wakeup);
 #endif
-#ifdef ARDUINO_ARCH_RP2040
+#if defined ARDUINO_ARCH_RP2040 || defined ARDUINO_RAKWIRELESS_RAK11300
 	g_task_wakeup_timer.oneShot = false;
 	g_task_wakeup_timer.ReloadValue = g_lorawan_settings.send_repeat_time;
+	g_task_wakeup_timer.Callback = periodic_wakeup;
 	TimerInit(&g_task_wakeup_timer, periodic_wakeup);
 	TimerSetValue(&g_task_wakeup_timer, g_lorawan_settings.send_repeat_time);
 #endif
@@ -212,7 +216,7 @@ void api_timer_start(void)
 		xTimerStart(g_task_wakeup_timer, 0);
 	}
 #endif
-#if defined ARDUINO_ARCH_RP2040
+#if defined ARDUINO_ARCH_RP2040 || defined ARDUINO_RAKWIRELESS_RAK11300
 	TimerStart(&g_task_wakeup_timer);
 #endif
 #if defined ESP32
@@ -240,7 +244,7 @@ void api_timer_stop(void)
 	}
 
 #endif
-#if defined ARDUINO_ARCH_RP2040
+#if defined ARDUINO_ARCH_RP2040 || defined ARDUINO_RAKWIRELESS_RAK11300
 	TimerStop(&g_task_wakeup_timer);
 #endif
 #if defined ESP32
@@ -259,7 +263,7 @@ void api_timer_restart(uint32_t new_time)
 	// g_task_wakeup_timer.stop();
 	api_timer_stop();
 #endif
-#ifdef ARDUINO_ARCH_RP2040
+#if defined ARDUINO_ARCH_RP2040 || defined ARDUINO_RAKWIRELESS_RAK11300
 	TimerStop(&g_task_wakeup_timer);
 #endif
 #if defined ESP32
@@ -283,7 +287,7 @@ void api_timer_restart(uint32_t new_time)
 			xTimerChangePeriod(g_task_wakeup_timer, mypdMS_TO_TICKS(new_time), 0);
 		}
 #endif
-#if defined ARDUINO_ARCH_RP2040
+#if defined ARDUINO_ARCH_RP2040 || defined ARDUINO_RAKWIRELESS_RAK11300
 		TimerSetValue(&g_task_wakeup_timer, new_time);
 		TimerStart(&g_task_wakeup_timer);
 #endif

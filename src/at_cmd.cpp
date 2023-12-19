@@ -1826,9 +1826,16 @@ static int at_exec_boot(void)
 	// No way to go into bootloader programmatically
 	ESP.restart();
 #endif
-#ifdef ARDUINO_ARCH_RP2040
+#ifdef ARDUINO_RAKWIRELESS_RAK11300
+	reset_usb_boot(0, 0);
+	while (1)
+		; // WDT will fire here
+
+#endif
+#if defined ARDUINO_ARCH_RP2040 && not defined ARDUINO_RAKWIRELESS_RAK11300
 	_ontouch1200bps_();
 #endif
+	return AT_SUCCESS;
 }
 
 /**
@@ -1845,9 +1852,13 @@ static int at_exec_dfu(void)
 #if defined ESP32
 	// No support for OTA DFU
 #endif
+#ifdef ARDUINO_RAKWIRELESS_RAK11300
+	rp2040.rebootToBootloader();
+#endif
 #ifdef ARDUINO_ARCH_RP2040
 	// No support for OTA DFU
 #endif
+		return AT_SUCCESS;
 }
 
 /** Application build time */
@@ -2798,7 +2809,7 @@ void at_serial_input(uint8_t cmd)
 	}
 }
 
-#ifdef NRF52_SERIES
+#if defined NRF52_SERIES
 /**
  * @brief Callback when data over USB arrived
  *
@@ -2806,6 +2817,7 @@ void at_serial_input(uint8_t cmd)
  */
 void tud_cdc_rx_cb(uint8_t itf)
 {
+	(void)itf;
 	g_task_event_type |= AT_CMD;
 	if (g_task_sem != NULL)
 	{
@@ -2813,7 +2825,79 @@ void tud_cdc_rx_cb(uint8_t itf)
 	}
 }
 #endif
-#ifdef ESP32
+
+#if defined ARDUINO_RAKWIRELESS_RAK11300
+/** USB task handle */
+TaskHandle_t _usbTaskHandle;
+
+void _usb_task(void *pvParameters)
+{
+	API_LOG("AT", "USB task started");
+	while (1)
+	{
+		// Wait for serial USB RX
+		if (Serial.available())
+		{
+			while (Serial.available() > 0)
+			{
+				at_serial_input(uint8_t(Serial.read()));
+				delay(5);
+			}
+		}
+
+		vTaskDelay(3000);
+	}
+}
+
+bool init_serial_task(void)
+{
+	// Initialize the USB task
+	if (xTaskCreate(_usb_task, "USB", 4096, NULL, 1, &_usbTaskHandle))
+	{
+		LOG_LIB("AT", "USB task start success");
+		return true;
+	}
+	return false;
+}
+
+// namespace arduino
+// {
+// 	int value = 0;
+// 	BaseType_t _xHigherPriorityTaskWoken = pdFALSE;
+
+// 	void serialEventRun(void)
+// 	{
+// 		if (Serial.available())
+// 		{
+// 			while (Serial.available() > 0)
+// 			{
+// 				at_serial_input(uint8_t(Serial.read()));
+// 				delay(5);
+// 			}
+// 		}
+// 	}
+// };
+
+// namespace arduino
+// {
+// 	void serialEventRun(void)
+// 	{
+// 		if (Serial.available())
+// 		{
+// 			digitalWrite(LED_BLUE, !digitalRead(LED_BLUE));
+// 			{
+// 				g_task_event_type |= AT_CMD;
+// 				if (g_task_sem != NULL)
+// 				{
+// 					xSemaphoreGiveFromISR(g_task_sem, pdFALSE);
+// 				}
+// 			}
+// 		}
+// 	}
+// };
+#endif
+
+#if defined ESP32
 static BaseType_t xHigherPriorityTaskWoken = pdFALSE;
 /**
  * @brief Callback when data over USB arrived
@@ -2828,7 +2912,7 @@ void usb_rx_cb(void)
 }
 #endif
 
-#ifdef ARDUINO_ARCH_RP2040
+#if defined ARDUINO_ARCH_RP2040 && not defined ARDUINO_RAKWIRELESS_RAK11300
 /** The event handler thread */
 Thread _thread_handle_serial(osPriorityNormal, 4096);
 

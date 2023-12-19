@@ -57,7 +57,7 @@
 #ifdef NRF52_SERIES
 #include <nrf_nvic.h>
 #endif
-#ifdef ARDUINO_ARCH_RP2040
+#if defined ARDUINO_ARCH_RP2040 && not defined ARDUINO_RAKWIRELESS_RAK11300
 #include <mbed.h>
 #include <rtos.h>
 #include <multicore.h>
@@ -84,10 +84,17 @@ using namespace std::chrono;
 #if defined NRF52_SERIES
 void periodic_wakeup(TimerHandle_t unused);
 extern SemaphoreHandle_t g_task_sem;
-// extern SoftwareTimer g_task_wakeup_timer;
 extern TimerHandle_t g_task_wakeup_timer;
 #endif
-#ifdef ARDUINO_ARCH_RP2040
+
+#if defined ARDUINO_RAKWIRELESS_RAK11300
+void periodic_wakeup(void);
+extern SemaphoreHandle_t g_task_sem;
+// extern SoftwareTimer g_task_wakeup_timer;
+extern TimerEvent_t g_task_wakeup_timer;
+#endif
+
+#if defined ARDUINO_ARCH_RP2040 && not defined ARDUINO_RAKWIRELESS_RAK11300
 void periodic_wakeup(void);
 extern osThreadId loop_thread;
 extern TimerEvent_t g_task_wakeup_timer;
@@ -343,7 +350,7 @@ extern uint8_t g_user_at_cmd_num __attribute__((weak));
 extern bool has_custom_at;
 
 void at_settings(void);
-#ifdef ARDUINO_ARCH_RP2040
+#if defined ARDUINO_ARCH_RP2040 || defined ARDUINO_RAKWIRELESS_RAK11300
 bool init_serial_task(void);
 #endif
 #ifdef ESP32

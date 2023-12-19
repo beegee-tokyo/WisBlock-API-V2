@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2021
  *
  */
-#ifdef ARDUINO_ARCH_RP2040
+#if defined ARDUINO_ARCH_RP2040 && not defined ARDUINO_RAKWIRELESS_RAK11300
 
 #include "WisBlock-API-V2.h"
 

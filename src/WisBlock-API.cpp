@@ -41,7 +41,32 @@ void periodic_wakeup(TimerHandle_t unused)
 }
 #endif
 
-#if defined ARDUINO_ARCH_RP2040
+#if defined ARDUINO_RAKWIRELESS_RAK11300
+/** Semaphore used by events to wake up loop task */
+SemaphoreHandle_t g_task_sem = NULL;
+
+/** Timer to wakeup task frequently and send message */
+TimerEvent_t g_task_wakeup_timer;
+
+/** Flag for the event type */
+volatile uint16_t g_task_event_type = NO_EVENT;
+
+/**
+ * @brief Timer event that wakes up the loop task frequently
+ *
+ * @param unused
+ */
+void periodic_wakeup(void)
+{
+#ifndef _CUSTOM_BOARD_
+	// Switch on LED to show we are awake
+	digitalWrite(LED_GREEN, HIGH);
+#endif
+	api_wake_loop(STATUS);
+}
+#endif
+
+#if defined ARDUINO_ARCH_RP2040 && not defined ARDUINO_RAKWIRELESS_RAK11300
 /** Loop thread ID */
 osThreadId loop_thread = NULL;
 
@@ -101,7 +126,7 @@ void periodic_wakeup(void)
 void setup()
 {
 
-#if defined NRF52_SERIES || defined ESP32
+#if defined NRF52_SERIES || defined ESP32 || defined ARDUINO_RAKWIRELESS_RAK11300
 	// Create the task event semaphore
 	g_task_sem = xSemaphoreCreateBinary();
 	// Initialize semaphore
@@ -154,7 +179,7 @@ void setup()
 	API_LOG("API", "WisBlock API LoRaWAN");
 	API_LOG("API", "====================");
 
-#ifdef ARDUINO_ARCH_RP2040
+#if defined ARDUINO_ARCH_RP2040 || defined ARDUINO_RAKWIRELESS_RAK11300
 	// Initialize background task for Serial port handling
 	init_serial_task();
 #endif
@@ -246,7 +271,7 @@ void setup()
  */
 void loop()
 {
-#ifdef ARDUINO_ARCH_RP2040
+#if defined ARDUINO_ARCH_RP2040 && not defined ARDUINO_RAKWIRELESS_RAK11300
 	loop_thread = osThreadGetId();
 #endif
 	// Sleep until we are woken up by an event
@@ -258,6 +283,15 @@ void loop()
 #endif
 		while (g_task_event_type != NO_EVENT)
 		{
+#ifdef ARDUINO_RAKWIRELESS_RAK11300
+			/// \todo there is still a run-time problem with the timers
+			bool restart_timer = false;
+			if ((g_task_event_type & STATUS) == STATUS)
+			{
+				API_LOG("API", "Prepare restart of timer");
+				restart_timer = true;
+			}
+#endif
 			// Application specific event handler (timer event or others)
 			app_event_handler();
 
@@ -307,6 +341,15 @@ void loop()
 					delay(5);
 				}
 			}
+#ifdef ARDUINO_RAKWIRELESS_RAK11300
+			if (restart_timer)
+			{
+				/// \todo there is still a run-time problem with the timers
+				api_timer_stop();
+				delay(100);
+				api_timer_start();
+			}
+#endif
 		}
 		// Skip this log message when USB data is received
 		if ((g_task_event_type & AT_CMD) == AT_CMD)
