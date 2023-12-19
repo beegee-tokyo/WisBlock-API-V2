@@ -4,6 +4,9 @@ Arduino library for RAKWireless WisBlock Core modules that takes all the LoRaWAN
 
 # Release Notes
 
+## 2.0.16 Add Arduino-Pico support
+  - Support RAK11300 with Arduino-Pico BSP
+
 ## 2.0.15 Fix ESP32
   - Make ESP32 work with WisBlock-API-V2
 

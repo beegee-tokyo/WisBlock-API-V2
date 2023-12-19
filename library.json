@@ -1,13 +1,14 @@
 {
 	"name": "WisBlock-API-V2",
-	"version": "2.0.15",
+	"version": "2.0.16",
 	"keywords": [
 		"lora",
 		"Semtech",
 		"SX126x",
 		"RAK4630",
 		"RAK11200",
-		"WisBlock"
+		"WisBlock",
+		"RAK11300"
 	],
 	"description": "An RUI3 AT command compatible library that covers the complete LoRa/LoRaWAN, BLE and AT command handling. Just write your application specific functions and leave the rest to the API",
 	"frameworks": [
@@ -15,7 +16,8 @@
 	],
 	"platforms": [
 		"nordicnrf52",
-		"espressif32"
+		"espressif32",
+		"rp2040"
 	],
 	"license": "MIT",
 	"authors": [
