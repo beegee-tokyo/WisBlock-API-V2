@@ -4,6 +4,9 @@ Arduino library for RAKWireless WisBlock Core modules that takes all the LoRaWAN
 
 # Release Notes
 
+## 2.0.17 Rework AT commands
+  - Make AT+PBW and AT+P2P compatible with WisToolBox
+
 ## 2.0.16 Add Arduino-Pico support
   - Support RAK11300 with Arduino-Pico BSP
 

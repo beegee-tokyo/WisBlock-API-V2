@@ -52,7 +52,7 @@ void set_new_config(void)
 					  g_lorawan_settings.p2p_cr, 0, g_lorawan_settings.p2p_preamble_len,
 					  g_lorawan_settings.p2p_symbol_timeout, false,
 					  0, true, 0, 0, false, g_rx_continuous);
-	
+
 	// Radio.Rx(0);
 }
 
@@ -335,7 +335,7 @@ static int at_exec_p2p_sf(char *str)
  */
 static int at_query_p2p_bw(void)
 {
-	snprintf(g_at_query_buf, ATQUERY_SIZE, "%s", bandwidths[g_lorawan_settings.p2p_bandwidth]);
+	snprintf(g_at_query_buf, ATQUERY_SIZE, "%d", g_lorawan_settings.p2p_bandwidth); //%s", bandwidths[g_lorawan_settings.p2p_bandwidth]);
 	return AT_SUCCESS;
 }
 
@@ -351,11 +351,29 @@ static int at_exec_p2p_bw(char *str)
 	{
 		return AT_ERRNO_NOALLOW;
 	}
-	for (int idx = 0; idx < 10; idx++)
+
+	/// \todo backward compatible to old BW AT command
+	long req_bw = strtol(str, NULL, 0);
+
+	if (req_bw > 10)
 	{
-		if (strcmp(str, bandwidths[idx]) == 0)
+		for (int idx = 0; idx < 10; idx++)
 		{
-			g_lorawan_settings.p2p_bandwidth = idx;
+			if (strcmp(str, bandwidths[idx]) == 0)
+			{
+				g_lorawan_settings.p2p_bandwidth = idx;
+				save_settings();
+
+				set_new_config();
+				return AT_SUCCESS;
+			}
+		}
+	}
+	else
+	{
+		if ((req_bw >= 0) && (req_bw <= 9))
+		{
+			g_lorawan_settings.p2p_bandwidth = req_bw;
 			save_settings();
 
 			set_new_config();
@@ -483,10 +501,17 @@ static int at_exec_p2p_txp(char *str)
  */
 static int at_query_p2p_config(void)
 {
-	snprintf(g_at_query_buf, ATQUERY_SIZE, "%ld:%d:%s:%d:%d:%d",
+	// snprintf(g_at_query_buf, ATQUERY_SIZE, "%ld:%d:%s:%d:%d:%d",
+	// 		 g_lorawan_settings.p2p_frequency,
+	// 		 g_lorawan_settings.p2p_sf,
+	// 		 bandwidths[g_lorawan_settings.p2p_bandwidth],
+	// 		 g_lorawan_settings.p2p_cr - 1,
+	// 		 g_lorawan_settings.p2p_preamble_len,
+	// 		 g_lorawan_settings.p2p_tx_power);
+	snprintf(g_at_query_buf, ATQUERY_SIZE, "%ld:%d:%d:%d:%d:%d",
 			 g_lorawan_settings.p2p_frequency,
 			 g_lorawan_settings.p2p_sf,
-			 bandwidths[g_lorawan_settings.p2p_bandwidth],
+			 g_lorawan_settings.p2p_bandwidth,
 			 g_lorawan_settings.p2p_cr - 1,
 			 g_lorawan_settings.p2p_preamble_len,
 			 g_lorawan_settings.p2p_tx_power);
@@ -540,14 +565,36 @@ static int at_exec_p2p_config(char *str)
 			if (param != NULL)
 			{
 				bool found_bw = false;
-				for (int idx = 0; idx < 10; idx++)
+				/// \todo backward compatible to old BW AT command
+				long req_bw = strtol(param, NULL, 0);
+				if (req_bw > 10)
 				{
-					if (strcmp(param, bandwidths[idx]) == 0)
+					for (int idx = 0; idx < 10; idx++)
 					{
-						g_lorawan_settings.p2p_bandwidth = idx;
+						if (strcmp(str, bandwidths[idx]) == 0)
+						{
+							g_lorawan_settings.p2p_bandwidth = idx;
+							found_bw = true;
+						}
+					}
+				}
+				else
+				{
+					if ((req_bw >= 0) && (req_bw <= 9))
+					{
+						g_lorawan_settings.p2p_bandwidth = req_bw;
 						found_bw = true;
 					}
 				}
+				// bool found_bw = false;
+				// for (int idx = 0; idx < 10; idx++)
+				// {
+				// 	if (strcmp(param, bandwidths[idx]) == 0)
+				// 	{
+				// 		g_lorawan_settings.p2p_bandwidth = idx;
+				// 		found_bw = true;
+				// 	}
+				// }
 				if (!found_bw)
 				{
 					return AT_ERRNO_PARA_VAL;
@@ -1796,8 +1843,22 @@ static int at_query_status(void)
 	AT_PRINTF("ATC+STATUS=?");
 	at_settings();
 	snprintf(g_at_query_buf, ATQUERY_SIZE, " ");
+	AT_PRINTF("OK");
 
 	return AT_CB_PRINT;
+}
+
+static int at_exec_status(void)
+{
+	// at_query_status();
+	at_settings();
+	return AT_SUCCESS;
+
+	// AT_PRINTF("ATC+STATUS=?");
+	// at_settings();
+	// snprintf(g_at_query_buf, ATQUERY_SIZE, " ");
+
+	// return AT_CB_PRINT;
 }
 
 /**
@@ -1858,7 +1919,7 @@ static int at_exec_dfu(void)
 #ifdef ARDUINO_ARCH_RP2040
 	// No support for OTA DFU
 #endif
-		return AT_SUCCESS;
+	return AT_SUCCESS;
 }
 
 /** Application build time */
@@ -2352,7 +2413,7 @@ static atcmd_t g_at_cmd_list[] = {
 	{"+LSTMULC", "Get multicast status", at_query_lstmulc, NULL, NULL, "R"},
 	// Custom AT commands
 	{"+DFU", "Force OTA DFU mode", NULL, NULL, at_exec_dfu, "R"},
-	{"+STATUS", "Status, Show LoRaWAN status", at_query_status, NULL, NULL, "R"},
+	{"+STATUS", "Status, Show LoRaWAN status", at_query_status, NULL, at_exec_status, "R"},
 	{"+SENDINT", "Send interval, Get or Set the automatic send interval", at_query_sendint, at_exec_sendint, NULL, "RW"},
 	{"+PORT", "Get or Set the Port=[1..223]", at_query_port, at_exec_port, NULL, "RW"},
 	{"+PRD_INFO", "Get product info", at_query_info, NULL, NULL, "R"},

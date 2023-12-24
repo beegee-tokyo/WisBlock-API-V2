@@ -1228,6 +1228,8 @@ AT Command functions: Taylor Lee (taylor.lee@rakwireless.com)
 # Changelog
 [Code releases](CHANGELOG.md)
 
+- 2023-12-24 Rework AT commands
+  - Make AT+PBW and AT+P2P compatible with WisToolBox
 - 2023-12-19 Add Arduino-Pico support
   - Support RAK11300 with Arduino-Pico BSP
 - 2023-12-07 Fix ESP32
