@@ -1228,6 +1228,8 @@ AT Command functions: Taylor Lee (taylor.lee@rakwireless.com)
 # Changelog
 [Code releases](CHANGELOG.md)
 
+- 2024-06-26 Fix dependency to CayenneLPP
+  - Ownership of library has changed, PIO couldn't find the library
 - 2023-12-24 Rework AT commands
   - Make AT+PBW and AT+P2P compatible with WisToolBox
 - 2023-12-19 Add Arduino-Pico support
