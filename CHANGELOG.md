@@ -4,6 +4,9 @@ Arduino library for RAKWireless WisBlock Core modules that takes all the LoRaWAN
 
 # Release Notes
 
+## 2.0.18 Fix dependency to CayenneLPP
+  - Ownership of library has changed, PIO couldn't find the library
+  
 ## 2.0.17 Rework AT commands
   - Make AT+PBW and AT+P2P compatible with WisToolBox
 
