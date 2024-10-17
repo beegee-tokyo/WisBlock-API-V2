@@ -2829,6 +2829,8 @@ static void at_cmd_handle(void)
 	return;
 }
 
+bool convert_to_upper = true;
+
 /**
  * @brief Get Serial input and start parsing
  *
@@ -2845,21 +2847,32 @@ void at_serial_input(uint8_t cmd)
 		Serial.printf(" \b");
 	}
 
-	// Convert to uppercase
-	if (cmd >= 'a' && cmd <= 'z')
+	if (cmd == '=')
 	{
-		cmd = toupper(cmd);
+		// Stop conversion to upper case
+		convert_to_upper = false;
+	}
+
+	if (convert_to_upper)
+	{ // Convert to uppercase
+		if (cmd >= 'a' && cmd <= 'z')
+		{
+			cmd = toupper(cmd);
+		}
 	}
 
 	// Check valid character
-	if ((cmd >= '0' && cmd <= '9') || (cmd >= 'a' && cmd <= 'z') ||
-		(cmd >= 'A' && cmd <= 'Z') || cmd == '?' || cmd == '+' || cmd == ':' ||
-		cmd == '=' || cmd == ' ' || cmd == ',' || cmd == '.' || cmd == '_')
+	// if ((cmd >= '0' && cmd <= '9') || (cmd >= 'a' && cmd <= 'z') ||
+	// 	(cmd >= 'A' && cmd <= 'Z') || cmd == '?' || cmd == '+' || cmd == ':' ||
+	// 	cmd == '=' || cmd == ' ' || cmd == ',' || cmd == '.' || cmd == '_' ||
+	// 	cmd == '&' || cmd == '\\' || cmd == '/' || cmd == '@')
+	if ((cmd >= 0x20 && cmd <= 0x7E))
 	{
 		atcmd[atcmd_index++] = cmd;
 	}
 	else if (cmd == '\r' || cmd == '\n')
 	{
+		convert_to_upper = true;
 		atcmd[atcmd_index] = '\0';
 		at_cmd_handle();
 	}

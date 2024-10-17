@@ -4,6 +4,10 @@ Arduino library for RAKWireless WisBlock Core modules that takes all the LoRaWAN
 
 # Release Notes
 
+## 2.0.19 AT command parsing and default fPort changes
+  - Allow upper and lower case and special characters in AT commands after the "="
+  - Change LoRaWAN default fPort from 0 to 1
+
 ## 2.0.18 Fix dependency to CayenneLPP
   - Ownership of library has changed, PIO couldn't find the library
   

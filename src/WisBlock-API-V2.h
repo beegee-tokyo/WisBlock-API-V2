@@ -175,7 +175,7 @@ int8_t init_lora(void);
 int8_t init_lorawan(bool region_change = false);
 int8_t re_init_lorawan(void);
 bool send_p2p_packet(uint8_t *data, uint8_t size);
-lmh_error_status send_lora_packet(uint8_t *data, uint8_t size, uint8_t fport = 0);
+lmh_error_status send_lora_packet(uint8_t *data, uint8_t size, uint8_t fport = 1);
 extern bool g_lpwan_has_joined;
 extern bool g_rx_fin_result;
 extern bool g_join_result;

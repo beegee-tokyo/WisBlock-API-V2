@@ -395,7 +395,7 @@ uint8_t g_user_at_cmd_num = sizeof(g_user_at_cmd_list_example) / sizeof(atcmd_t)
 
 These five examples explain the usage of the API. In all examples the API callbacks and the additional functions (sensor readings, IRQ handling, GNSS location service) are separated into their own sketches.    
 - The simplest example (_**api-test.ino**_) just sends a 3 byte packet with the values 0x10, 0x00, 0x00.    
-- The other examples send their data encoded in the same format as RAKwireless WisNode devices. An explanation of the data format can be found in the RAKwireless [Documentation Center](https://docs.rakwireless.com/Product-Categories/WisTrio/RAK7205-5205/Quickstart/#decoding-sensor-data-on-chirpstack-and-ttn) :arrow_upper_right:. A ready to use packet decoder can be found in the RAKwireless Github repos in [RAKwireless_Standardized_Payload](https://github.com/RAKWireless/RAKwireless_Standardized_Payload) :arrow_upper_right:
+- The other examples send their data encoded in the same format as RAKwireless WisNode devices. An explanation of the data format can be found in the RAKwireless [Documentation Center](https://docs.rakwireless.com/Product-Categories/WisTrio/RAK7205-5205/Quickstart/#decoding-sensor-data-on-chirpstack-and-ttn) :arrow_upper_right:. A ready to use packet decoder can be found in the RAKwireless Github repos in [RUI_LoRa_node_payload_decoder](https://github.com/RAKWireless/RUI_LoRa_node_payload_decoder) :arrow_upper_right:
 - The LoRa P2P example (_**LoRa-P2P.ino**_) listens for P2P packets and displays them in the log.    
 
 _**The WisBlock-API-V2 has been used as well in the following PlatformIO projects:**_
@@ -1227,7 +1227,9 @@ AT Command functions: Taylor Lee (taylor.lee@rakwireless.com)
 ----
 # Changelog
 [Code releases](CHANGELOG.md)
-
+- 2024-10-17 AT command parsing and default fPort changes
+  - Allow upper and lower case and special characters in AT commands after the "="
+  - Change LoRaWAN default fPort from 0 to 1
 - 2024-06-26 Fix dependency to CayenneLPP
   - Ownership of library has changed, PIO couldn't find the library
 - 2023-12-24 Rework AT commands
