@@ -13,7 +13,7 @@
 
 #define WISBLOCK_API_VER 2
 #define WISBLOCK_API_VER2 0
-#define WISBLOCK_API_VER3 10
+#define WISBLOCK_API_VER3 20
 #ifndef NO_BLE_LED
 // Set usage of BLE connection LED (blue). Comment the line to enable LED
 #define NO_BLE_LED 1
