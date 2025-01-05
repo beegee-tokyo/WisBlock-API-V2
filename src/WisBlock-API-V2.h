@@ -432,5 +432,5 @@ extern uint16_t g_sw_ver_1;	   // major version increase on API change / not bac
 extern uint16_t g_sw_ver_2;	   // minor version increase on API change / backward compatible
 extern uint16_t g_sw_ver_3;	   // patch version increase on bugfix, no affect on API
 extern String g_device_pid;	   // Product PID (if applicable)
-extern String g_custom_fw_ver; // Custom firmware version
+extern char g_custom_fw_ver[]; // Custom firmware version
 #endif						   // WISBLOCK_API_H

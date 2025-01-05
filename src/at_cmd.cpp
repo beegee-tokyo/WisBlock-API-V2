@@ -1804,20 +1804,26 @@ static int at_query_snr(void)
 }
 
 /**
- * @brief AT+VER=? Get firmware version and build date
+ * @brief AT+VER=? Get BSP version
  *
  * @return int AT_SUCCESS;
  */
 static int at_query_version(void)
 {
-	if (g_custom_fw_ver.equals("unset"))
-	{
-		snprintf(g_at_query_buf, ATQUERY_SIZE, "WisBlock API %d.%d.%d", WISBLOCK_API_VER, WISBLOCK_API_VER2, WISBLOCK_API_VER3);
-	}
-	else
-	{
-		snprintf(g_at_query_buf, ATQUERY_SIZE, "%s", g_custom_fw_ver.c_str());
-	}
+	snprintf(g_at_query_buf, ATQUERY_SIZE, "WisBlock API %d.%d.%d", WISBLOCK_API_VER, WISBLOCK_API_VER2, WISBLOCK_API_VER3);
+
+	return AT_SUCCESS;
+}
+
+/**
+ * @brief AT+FIRMWAREVER=? Get application version
+ *
+ * @return int AT_SUCCESS;
+ */
+static int at_query_app_version(void)
+{
+	snprintf(g_at_query_buf, ATQUERY_SIZE, "%s", g_custom_fw_ver);
+
 	return AT_SUCCESS;
 }
 
@@ -2373,6 +2379,7 @@ static atcmd_t g_at_cmd_list[] = {
 	{"+RSSI", "Last RX packet RSSI", at_query_rssi, NULL, NULL, "R"},
 	{"+SNR", "Last RX packet SNR", at_query_snr, NULL, NULL, "R"},
 	{"+VER", "Get SW version", at_query_version, NULL, NULL, "R"},
+	{"+FIRMWAREVER", "Get Application version", at_query_app_version, NULL, NULL, "R"},
 	// LoRa P2P management
 	{"+NWM", "Switch LoRa workmode", at_query_mode, at_exec_mode, NULL, "RW"},
 	{"+PFREQ", "Set P2P frequency", at_query_p2p_freq, at_exec_p2p_freq, NULL, "RW"},
