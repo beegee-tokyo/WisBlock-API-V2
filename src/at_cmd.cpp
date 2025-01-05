@@ -1157,6 +1157,42 @@ static int at_exec_devaddr(char *str)
 }
 
 /**
+ * @brief AT+SYNCWORD=? Get device sync word
+ *
+ * @return int AT_SUCCESS if no error, otherwise AT_ERROR
+ */
+static int at_query_syncword(void)
+{
+	uint16_t syncword = Radio.GetSyncWord();
+
+	snprintf(g_at_query_buf, ATQUERY_SIZE, "%04X", syncword);
+	return AT_SUCCESS;
+}
+
+/**
+ * @brief AT+SYNCWORD=<XXXX> Set device sync word
+ *
+ * @return int AT_SUCCESS if no error, otherwise AT_ERRNO_PARA_VAL
+ */
+static int at_exec_syncword(char *str)
+{
+	uint8_t len;
+	uint8_t buf[9] = {0};
+
+	len = hex2bin(str, buf, 2);
+	if (len != 2)
+	{
+		return AT_ERRNO_PARA_VAL;
+	}
+
+	uint16_t syncword = (uint16_t)(buf[0] << 8) + (uint16_t)(buf[1]);
+
+	Radio.SetCustomSyncWord(syncword);
+
+	return AT_SUCCESS;
+}
+
+/**
  * @brief AT+APPSKEY=? Get application session key
  *
  * @return int AT_SUCCESS;
@@ -2361,6 +2397,7 @@ static atcmd_t g_at_cmd_list[] = {
 	{"+APPSKEY", "Get or set the application session key", at_query_appskey, at_exec_appskey, NULL, "RW"},
 	{"+NWKSKEY", "Get or Set the network session key", at_query_nwkskey, at_exec_nwkskey, NULL, "RW"},
 	{"+DEVADDR", "Get or set the device address", at_query_devaddr, at_exec_devaddr, NULL, "RW"},
+	{"+SYNCWORD", "Get or set the LoRaWAN sync word", at_query_syncword, at_exec_syncword, NULL, "RW"},
 	// Joining and sending data on LoRa network
 	{"+CFM", "Get or set the confirm mode", at_query_confirm, at_exec_confirm, NULL, "RW"},
 	{"+JOIN", "Join network", at_query_join, at_exec_join, NULL, "RW"},

@@ -1227,8 +1227,9 @@ AT Command functions: Taylor Lee (taylor.lee@rakwireless.com)
 ----
 # Changelog
 [Code releases](CHANGELOG.md)
-- 2025-01-05 RUI3 AT command compatibility
+- 2025-01-05 Improve RUI3 AT command compatibility
   - Add AT+FIRMWAREVER command
+  - Add AT+SYNCWORD command
 - 2024-10-17 AT command parsing and default fPort changes
   - Allow upper and lower case and special characters in AT commands after the "="
   - Change LoRaWAN default fPort from 0 to 1
