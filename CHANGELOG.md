@@ -4,8 +4,9 @@ Arduino library for RAKWireless WisBlock Core modules that takes all the LoRaWAN
 
 # Release Notes
 
-## 2.0.20 RUI3 AT command compatibility
+## 2.0.22 Improve RUI3 AT command compatibility
   - Add AT+FIRMWAREVER command
+  - Add AT+SYNCWORD command
   
 ## 2.0.19 AT command parsing and default fPort changes
   - Allow upper and lower case and special characters in AT commands after the "="
