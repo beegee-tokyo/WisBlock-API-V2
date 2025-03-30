@@ -8,6 +8,7 @@
  * @copyright Copyright (c) 2023
  *
  */
+#include <variant.h>
 #ifndef WISBLOCK_API_H
 #define WISBLOCK_API_H
 
@@ -356,6 +357,7 @@ bool init_serial_task(void);
 #ifdef ESP32
 #include "USB.h"
 void usb_rx_cb(void);
+void usbEventCallback(void *arg, esp_event_base_t event_base, int32_t event_id, void *event_data);
 void stop_ble_adv(void);
 #endif
 

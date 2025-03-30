@@ -1227,6 +1227,8 @@ AT Command functions: Taylor Lee (taylor.lee@rakwireless.com)
 ----
 # Changelog
 [Code releases](CHANGELOG.md)
+- 2025-03-30 Update
+  - Add RAK3112 Core module with ESP32-S3 and integrated SX1262 transceiver
 - 2025-01-05 Improve RUI3 AT command compatibility
   - Add AT+FIRMWAREVER command
   - Add AT+SYNCWORD command

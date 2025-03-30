@@ -94,9 +94,11 @@ uint32_t otaaDevAddr = 0;
 int8_t init_lorawan(bool region_change)
 {
 #ifdef ESP32
+#ifndef RAK3112
 	pinMode(WB_IO2, OUTPUT);
 	digitalWrite(WB_IO2, HIGH);
 	delay(500);
+#endif
 #endif
 
 	// Initialize LoRa chip.

@@ -4,6 +4,9 @@ Arduino library for RAKWireless WisBlock Core modules that takes all the LoRaWAN
 
 # Release Notes
 
+## 2.0.23 Update
+  - Add RAK3112 Core module with ESP32-S3 and integrated SX1262 transceiver
+  
 ## 2.0.22 Improve RUI3 AT command compatibility
   - Add AT+FIRMWAREVER command
   - Add AT+SYNCWORD command

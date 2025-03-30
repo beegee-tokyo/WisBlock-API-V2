@@ -166,7 +166,11 @@ void setup()
 #endif
 
 #ifdef ESP32
+#ifdef RAK3112
+	Serial.onEvent(ARDUINO_USB_CDC_RX_EVENT, usbEventCallback);
+#else
 	Serial.onReceive(usb_rx_cb);
+#endif
 #endif
 #ifndef _CUSTOM_BOARD_
 	digitalWrite(LED_GREEN, HIGH);

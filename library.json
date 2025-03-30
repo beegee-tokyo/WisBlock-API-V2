@@ -1,6 +1,6 @@
 {
 	"name": "WisBlock-API-V2",
-	"version": "2.0.22",
+	"version": "2.0.23",
 	"keywords": [
 		"lora",
 		"Semtech",
@@ -8,7 +8,8 @@
 		"RAK4630",
 		"RAK11200",
 		"WisBlock",
-		"RAK11300"
+		"RAK11300",
+		"RAK3112"
 	],
 	"description": "An RUI3 AT command compatible library that covers the complete LoRa/LoRaWAN, BLE and AT command handling. Just write your application specific functions and leave the rest to the API",
 	"frameworks": [

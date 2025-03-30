@@ -388,7 +388,11 @@ void init_ble()
 	API_LOG("BLE", "Initialize BLE");
 	// Initialize BLE and set output power
 	BLEDevice::init(g_ble_dev_name);
+#ifdef RAK3112
+	BLEDevice::setPower(ESP_PWR_LVL_P9);
+#else
 	BLEDevice::setPower(ESP_PWR_LVL_P7);
+#endif
 	BLEDevice::setMTU(200);
 
 	BLEAddress thisAddress = BLEDevice::getAddress();

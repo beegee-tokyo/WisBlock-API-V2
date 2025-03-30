@@ -131,7 +131,11 @@ void at_settings(void)
 	AT_PRINTF("   RAK11310");
 #endif
 #ifdef ESP32
+#ifdef RAK3112
+	AT_PRINTF("   RAK3312");
+#else
 	AT_PRINTF("   RAK11200");
+#endif
 #endif
 	AT_PRINTF("   Mode %s", g_lorawan_settings.lorawan_enable ? "LPWAN" : "P2P");
 	if (g_lorawan_settings.lorawan_enable)
@@ -2024,7 +2028,11 @@ static int at_query_api(void)
 static int at_query_hw_model(void)
 {
 #ifdef ESP32
+#ifdef RAK3112
+	snprintf(g_at_query_buf, ATQUERY_SIZE, "rak3112");
+#else
 	snprintf(g_at_query_buf, ATQUERY_SIZE, "rak11200");
+#endif
 #elif defined ARDUINO_ARCH_RP2040
 	snprintf(g_at_query_buf, ATQUERY_SIZE, "rak11310");
 #else // NRF52_SERIES
@@ -2041,7 +2049,11 @@ static int at_query_hw_model(void)
 static int at_query_hw_id(void)
 {
 #ifdef ESP32
+#ifdef RAK3112
+	snprintf(g_at_query_buf, ATQUERY_SIZE, "esp32s3");
+#else
 	snprintf(g_at_query_buf, ATQUERY_SIZE, "esp32");
+#endif
 #elif defined ARDUINO_ARCH_RP2040
 	snprintf(g_at_query_buf, ATQUERY_SIZE, "rp2040");
 #else // NRF52_SERIES
@@ -3026,6 +3038,21 @@ void usb_rx_cb(void)
 	if (g_task_sem != NULL)
 	{
 		xSemaphoreGiveFromISR(g_task_sem, &xHigherPriorityTaskWoken);
+	}
+}
+
+void usbEventCallback(void *arg, esp_event_base_t event_base, int32_t event_id, void *event_data)
+{
+	if (event_base == ARDUINO_USB_CDC_EVENTS)
+	{
+		if (event_id == ARDUINO_USB_CDC_RX_EVENT)
+		{
+			g_task_event_type |= AT_CMD;
+			if (g_task_sem != NULL)
+			{
+				xSemaphoreGiveFromISR(g_task_sem, &xHigherPriorityTaskWoken);
+			}
+		}
 	}
 }
 #endif
