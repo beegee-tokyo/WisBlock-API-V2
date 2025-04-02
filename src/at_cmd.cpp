@@ -2533,7 +2533,7 @@ static int at_exec_list_all(void)
 static void at_cmd_handle(void)
 {
 	uint8_t i;
-	int ret = 0;
+	int ret = AT_ERRNO_NOSUPP;
 	const char *cmd_name;
 	char *rxcmd = atcmd + 2;
 	int16_t tmp = atcmd_index - 2;
