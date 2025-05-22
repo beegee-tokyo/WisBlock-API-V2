@@ -21,7 +21,7 @@ using namespace Adafruit_LittleFS_Namespace;
 
 const char settings_name[] = "RAK";
 
-File lora_file(InternalFS);
+Adafruit_LittleFS_Namespace::File lora_file(InternalFS);
 
 void flash_int_reset(void);
 
