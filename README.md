@@ -1227,6 +1227,9 @@ AT Command functions: Taylor Lee (taylor.lee@rakwireless.com)
 ----
 # Changelog
 [Code releases](CHANGELOG.md)
+
+- 2025-06-10 Fix RAK3112 BLE
+  - Fix the problems with AT commands over BLE on the RAK3112
 - 2025-04-02 Fix AT commands
   - Return AT_COMMAND_NOT_FOUND for unknown AT commands
 - 2025-03-30 Update

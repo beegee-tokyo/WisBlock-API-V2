@@ -9,7 +9,8 @@
  *
  */
 #ifdef ESP32
-
+#ifndef _VARIANT_RAK3112_
+// #warning "RAK11200"
 #include "WisBlock-API-V2.h"
 
 void start_ble_adv(void);
@@ -388,7 +389,7 @@ void init_ble()
 	API_LOG("BLE", "Initialize BLE");
 	// Initialize BLE and set output power
 	BLEDevice::init(g_ble_dev_name);
-#ifdef RAK3112
+#ifdef _VARIANT_RAK3112_
 	BLEDevice::setPower(ESP_PWR_LVL_P9);
 #else
 	BLEDevice::setPower(ESP_PWR_LVL_P7);
@@ -727,4 +728,5 @@ uint8_t unpack_settings(uint8_t *buffer)
 	return i + 1;
 }
 
+#endif // _VARIANT_RAK3112_
 #endif // ESP32

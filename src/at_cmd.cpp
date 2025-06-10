@@ -2894,7 +2894,7 @@ bool convert_to_upper = true;
  */
 void at_serial_input(uint8_t cmd)
 {
-	Serial.printf("%c", cmd);
+	// Serial.printf("%c", cmd);
 
 	// Handle backspace
 	if (cmd == '\b')
@@ -2989,42 +2989,6 @@ bool init_serial_task(void)
 	}
 	return false;
 }
-
-// namespace arduino
-// {
-// 	int value = 0;
-// 	BaseType_t _xHigherPriorityTaskWoken = pdFALSE;
-
-// 	void serialEventRun(void)
-// 	{
-// 		if (Serial.available())
-// 		{
-// 			while (Serial.available() > 0)
-// 			{
-// 				at_serial_input(uint8_t(Serial.read()));
-// 				delay(5);
-// 			}
-// 		}
-// 	}
-// };
-
-// namespace arduino
-// {
-// 	void serialEventRun(void)
-// 	{
-// 		if (Serial.available())
-// 		{
-// 			digitalWrite(LED_BLUE, !digitalRead(LED_BLUE));
-// 			{
-// 				g_task_event_type |= AT_CMD;
-// 				if (g_task_sem != NULL)
-// 				{
-// 					xSemaphoreGiveFromISR(g_task_sem, pdFALSE);
-// 				}
-// 			}
-// 		}
-// 	}
-// };
 #endif
 
 #if defined ESP32
@@ -3040,21 +3004,18 @@ void usb_rx_cb(void)
 		xSemaphoreGiveFromISR(g_task_sem, &xHigherPriorityTaskWoken);
 	}
 }
-
+#ifdef _VARIANT_RAK3112_
 void usbEventCallback(void *arg, esp_event_base_t event_base, int32_t event_id, void *event_data)
 {
-	if (event_base == ARDUINO_USB_CDC_EVENTS)
+	if (event_base == ARDUINO_HW_CDC_EVENTS)
 	{
-		if (event_id == ARDUINO_USB_CDC_RX_EVENT)
-		{
-			g_task_event_type |= AT_CMD;
-			if (g_task_sem != NULL)
+		if (event_id == ARDUINO_HW_CDC_RX_EVENT)
 			{
-				xSemaphoreGiveFromISR(g_task_sem, &xHigherPriorityTaskWoken);
-			}
+			usb_rx_cb();
 		}
 	}
 }
+#endif
 #endif
 
 #if defined ARDUINO_ARCH_RP2040 && not defined ARDUINO_RAKWIRELESS_RAK11300

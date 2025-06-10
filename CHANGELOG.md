@@ -4,6 +4,9 @@ Arduino library for RAKWireless WisBlock Core modules that takes all the LoRaWAN
 
 # Release Notes
 
+## 2.0.25 Fix RAK3112 BLE
+  - Fix the problems with AT commands over BLE on the RAK3112
+  
 ## 2.0.24 Fix AT commands
   - Return AT_COMMAND_NOT_FOUND for unknown AT commands
 

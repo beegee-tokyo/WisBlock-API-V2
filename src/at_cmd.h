@@ -26,6 +26,22 @@ extern uint8_t g_last_fport;
 	}
 #endif
 #ifdef ESP32
+#ifdef _VARIANT_RAK3112_
+#define AT_PRINTF(...)                            \
+	Serial.printf(__VA_ARGS__);                   \
+	Serial.printf("\n");                          \
+	if (g_ble_uart_is_connected)                  \
+	{                                             \
+		char buff[255];                           \
+		int len = sprintf(buff, __VA_ARGS__);     \
+		std::string buff_s(buff);                 \
+		uart_tx_characteristic->setValue(buff_s); \
+		uart_tx_characteristic->notify();         \
+		delay(50);                                \
+	}
+
+// uart_tx_characteristic->setValue(&buff[idx], 1);
+#else
 #define AT_PRINTF(...)                                                  \
 	Serial.printf(__VA_ARGS__);                                         \
 	Serial.printf("\n");                                                \
@@ -37,6 +53,7 @@ extern uint8_t g_last_fport;
 		uart_tx_characteristic->notify(true);                           \
 		delay(50);                                                      \
 	}
+#endif
 #endif
 
 #if defined ARDUINO_RAKWIRELESS_RAK11300

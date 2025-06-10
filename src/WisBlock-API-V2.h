@@ -143,10 +143,18 @@ extern char g_ble_dev_name[];
 
 #if defined ESP32
 // BLE
+#ifdef _VARIANT_RAK3112_
+#include <BLEUtils.h>
+#include <BLEServer.h>
+#include <BLEDevice.h>
+#include <BLEAdvertising.h>
+#include <BLE2902.h>
+#else
 #include <NimBLEUtils.h>
 #include <NimBLEServer.h>
 #include <NimBLEDevice.h>
 #include <NimBLEAdvertising.h>
+#endif
 #include <ArduinoJson.h>
 
 void init_ble(void);
