@@ -65,7 +65,9 @@ class MyServerCallbacks : public BLEServerCallbacks
 	{
 		API_LOG("BLE", "BLE client connected");
 		advertising_timer.detach();
+#if NO_BLE_LED > 0
 		blue_led_timer.detach();
+#endif
 		g_ble_uart_is_connected = true;
 #ifndef _CUSTOM_BOARD_
 		digitalWrite(LED_BLUE, HIGH);
@@ -83,7 +85,9 @@ class MyServerCallbacks : public BLEServerCallbacks
 		g_ble_uart_is_connected = false;
 		ble_advertising->start();
 		advertising_timer.once(_timeout, stop_ble_adv);
+#if NO_BLE_LED > 0
 		blue_led_timer.attach(1, toggle_blue_led);
+#endif
 #ifndef _CUSTOM_BOARD_
 		digitalWrite(LED_BLUE, LOW);
 #endif
@@ -207,7 +211,9 @@ void restart_advertising(uint16_t timeout)
 	{
 		advertising_timer.once(timeout, stop_ble_adv);
 #ifndef _CUSTOM_BOARD_
+#if NO_BLE_LED > 0
 		blue_led_timer.attach(1, toggle_blue_led);
+#endif
 #endif
 	}
 	ble_advertising->start();
@@ -220,7 +226,9 @@ void restart_advertising(uint16_t timeout)
 void stop_ble_adv(void)
 {
 	advertising_timer.detach();
+#if NO_BLE_LED > 0
 	blue_led_timer.detach();
+#endif
 #ifndef _CUSTOM_BOARD_
 	digitalWrite(LED_BLUE, LOW);
 #endif
@@ -234,7 +242,9 @@ void stop_ble_adv(void)
  */
 void start_ble_adv(void)
 {
+#if NO_BLE_LED > 0
 	blue_led_timer.attach(1, toggle_blue_led);
+#endif
 	if (g_lorawan_settings.auto_join)
 	{
 		advertising_timer.once(60, stop_ble_adv);

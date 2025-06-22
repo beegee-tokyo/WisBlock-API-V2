@@ -4,6 +4,9 @@ Arduino library for RAKWireless WisBlock Core modules that takes all the LoRaWAN
 
 # Release Notes
 
+## 2.0.26 Fix RAK3112 BLE LED control
+  - Fix the problems with missing BLE LED control on the RAK3112
+
 ## 2.0.25 Fix RAK3112 BLE
   - Fix the problems with AT commands over BLE on the RAK3112
   
