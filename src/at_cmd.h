@@ -18,7 +18,8 @@ extern uint8_t g_last_fport;
 #ifdef NRF52_SERIES
 #define AT_PRINTF(...)                  \
 	Serial.printf(__VA_ARGS__);         \
-	Serial.printf("\n");                \
+	Serial.printf("\r\n");              \
+	Serial.flush();                     \
 	if (g_ble_uart_is_connected)        \
 	{                                   \
 		g_ble_uart.printf(__VA_ARGS__); \
@@ -29,7 +30,8 @@ extern uint8_t g_last_fport;
 #ifdef _VARIANT_RAK3112_
 #define AT_PRINTF(...)                            \
 	Serial.printf(__VA_ARGS__);                   \
-	Serial.printf("\n");                          \
+	Serial.printf("\r\n");                        \
+	Serial.flush();                               \
 	if (g_ble_uart_is_connected)                  \
 	{                                             \
 		char buff[255];                           \
@@ -44,7 +46,8 @@ extern uint8_t g_last_fport;
 #else
 #define AT_PRINTF(...)                                                  \
 	Serial.printf(__VA_ARGS__);                                         \
-	Serial.printf("\n");                                                \
+	Serial.printf("\r\n");                                              \
+	Serial.flush();                                                     \
 	if (g_ble_uart_is_connected)                                        \
 	{                                                                   \
 		char buff[255];                                                 \
@@ -59,7 +62,8 @@ extern uint8_t g_last_fport;
 #if defined ARDUINO_RAKWIRELESS_RAK11300
 #define AT_PRINTF(...)          \
 	Serial.printf(__VA_ARGS__); \
-	Serial.printf("\r\n");
+	Serial.printf("\r\n");      \
+	Serial.flush();
 #endif
 
 #if defined ARDUINO_ARCH_RP2040 && not defined ARDUINO_RAKWIRELESS_RAK11300

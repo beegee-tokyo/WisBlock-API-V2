@@ -1228,6 +1228,8 @@ AT Command functions: Taylor Lee (taylor.lee@rakwireless.com)
 # Changelog
 [Code releases](CHANGELOG.md)
 
+- 2025-08-26 Fix AT+JOIN
+  - Add command without parameter to just joine
 - 2025-06-22 Fix RAK3112 BLE LED control
   - Fix the problems with missing BLE LED control on the RAK3112
 - 2025-06-10 Fix RAK3112 BLE

@@ -1355,7 +1355,37 @@ static int at_query_join(void)
 }
 
 /**
- * @brief AT+NJM=<Param1>,<Param2>,<Param3>,<Param4> Set join mode
+ * @brief AT+JOIN without parameters starts a join if in LoRaWAN mode.
+ * 
+ * @return int 
+ */
+int at_exec_join_np(void)
+{
+	if (g_lorawan_settings.lorawan_enable)
+	{
+		if (!g_lpwan_has_joined)
+		{
+			if (!g_lorawan_initialized)
+			{
+				init_lorawan();
+			}
+			// Start Join process
+			lmh_join();
+		}
+		else
+		{
+			// Nothing to do, already joined
+		}
+		return AT_SUCCESS;
+	}
+	else
+	{
+		return AT_ERRNO_NOALLOW;
+	}
+}
+
+/**
+ * @brief AT+JOIN=<Param1>,<Param2>,<Param3>,<Param4> Set join mode
  * Param1 = Join command: 1 for joining the network , 0 for stop joining (not supported)
  * Param2 = Auto-Join config: 1 for Auto-join on power up) , 0 for no auto-join.
  * Param3 = Reattempt interval: 7 - 255 seconds (ignored)
@@ -1463,6 +1493,8 @@ static int at_exec_join(char *str)
 				{
 					init_lorawan();
 				}
+				// Start Join process
+				lmh_join();
 			}
 			else
 			{
@@ -2412,7 +2444,7 @@ static atcmd_t g_at_cmd_list[] = {
 	{"+SYNCWORD", "Get or set the LoRaWAN sync word", at_query_syncword, at_exec_syncword, NULL, "RW"},
 	// Joining and sending data on LoRa network
 	{"+CFM", "Get or set the confirm mode", at_query_confirm, at_exec_confirm, NULL, "RW"},
-	{"+JOIN", "Join network", at_query_join, at_exec_join, NULL, "RW"},
+	{"+JOIN", "Join network", at_query_join, at_exec_join, at_exec_join_np, "RW"},
 	{"+NJS", "Get the join status", at_query_join_status, NULL, NULL, "R"},
 	{"+NJM", "Get or set the network join mode", at_query_joinmode, at_exec_joinmode, NULL, "RW"},
 	{"+SEND", "Send data", NULL, at_exec_send, NULL, "W"},
