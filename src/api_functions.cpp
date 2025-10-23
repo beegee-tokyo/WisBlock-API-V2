@@ -163,7 +163,11 @@ uint32_t api_init_lora(void)
 #ifdef _VARIANT_ISP4520_
 	return lora_isp4520_init(SX1262);
 #else
+#ifdef _VARIANT_RAK3400_
+	return lora_rak3400_init();
+#else
 	return lora_rak4630_init();
+#endif
 #endif
 #endif
 #if defined ARDUINO_ARCH_RP2040 || defined ARDUINO_RAKWIRELESS_RAK11300
