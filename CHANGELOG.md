@@ -4,6 +4,11 @@ Arduino library for RAKWireless WisBlock Core modules that takes all the LoRaWAN
 
 # Release Notes
 
+## 2.0.28 Add RAK3401/RAK3401
+  - Add RAK3401/RAK3401 support for RAK13300 and RAK13302 LoRa transceiver modules 
+  # _IMPORTANT:_
+  _**RAK3400/RAK3401 support works only when using PlatformIO. ArduinoIDE is not supported at the moment**_
+  
 ## 2.0.27 Fix AT+JOIN
   - Add command without parameter to just join
 

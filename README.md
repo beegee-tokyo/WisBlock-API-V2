@@ -1228,6 +1228,10 @@ AT Command functions: Taylor Lee (taylor.lee@rakwireless.com)
 # Changelog
 [Code releases](CHANGELOG.md)
 
+- 2025-10-23 Add RAK3401/RAK3401
+   - Add RAK3401/RAK3401 support for RAK13300 and RAK13302 LoRa transceiver modules
+  # _IMPORTANT:_
+  _**RAK3400/RAK3401 support works only when using PlatformIO. ArduinoIDE is not supported at the moment**_
 - 2025-08-26 Fix AT+JOIN
   - Add command without parameter to just joine
 - 2025-06-22 Fix RAK3112 BLE LED control
